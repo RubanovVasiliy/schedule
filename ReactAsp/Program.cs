@@ -1,9 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using schedule.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<ScheduleContext>(item =>
+    item.UseNpgsql(builder.Configuration.GetConnectionString("db"))
+);
 
 var app = builder.Build();
 

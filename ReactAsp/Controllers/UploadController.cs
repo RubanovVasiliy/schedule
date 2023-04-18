@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text;
+using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 
 namespace ReactAsp.Controllers;
@@ -21,16 +22,23 @@ public class UploadController : ControllerBase
         
         using (var package = new ExcelPackage(new FileInfo(filePath)))
         {
-            var worksheet = package.Workbook.Worksheets[0];
-            var rowCount = worksheet.Dimension.Rows;
-            var colCount = worksheet.Dimension.Columns;
-
-            for (int row = 1; row <= rowCount; row++)
+            var worksheet = package.Workbook.Worksheets["TDSheet"];
+            var str = new StringBuilder();
+            for (var col = 3; col <= worksheet.Dimension.End.Column; col++)
             {
-                for (int col = 1; col <= colCount; col++)
+                Console.Write(worksheet.Cells[2, col].Text + "\n");
+                for (var row = 3; row <= worksheet.Dimension.End.Row; row++)
                 {
-                    var cellValue = worksheet.Cells[row, col].Value;
-                    Console.Write("{0}\t", cellValue != null ? cellValue.ToString() : "");
+                    var excelRange = worksheet.Cells[row, col];
+
+                    var temp = excelRange.Text;
+                    if (string.IsNullOrEmpty(temp)) continue;
+                    var partDay = worksheet.Cells[row, 1];
+                    var partTime = worksheet.Cells[row, 2];
+                    var value = string.Join(" ", excelRange.Text.Split("\n"));
+                    str.Append($"{partDay.Text} - {partTime.Text} {value}");
+                    str.Append(Convert.ToInt16(excelRange.Address[^1]) % 2 == 1 ? " 2" : " 1");
+                    Console.WriteLine(str);
                 }
                 Console.WriteLine();
             }
