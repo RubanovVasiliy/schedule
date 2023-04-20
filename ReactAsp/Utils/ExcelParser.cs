@@ -15,7 +15,7 @@ public class ExcelParser
     public IEnumerable<TeacherSchedule> ParseData()
     {
         var teacherSchedules = new List<TeacherSchedule>();
-        
+
         for (var col = 3; col <= _worksheet.Dimension.End.Column; col++)
         {
             var teacherSchedule = new TeacherSchedule(_worksheet.Cells[2, col].Text);
@@ -23,27 +23,17 @@ public class ExcelParser
 
             for (var row = 3; row <= _worksheet.Dimension.End.Row; row++)
             {
-                var excelRange = _worksheet.Cells[row, col];
-                var temp = excelRange.Text;
+                if (string.IsNullOrEmpty(_worksheet.Cells[row, col].Text)) continue;
 
-                if (string.IsNullOrEmpty(temp)) continue;
+                var week = GetWeek(row, col);
 
-                var isOdd = Convert.ToInt16(excelRange.Address[^1]) % 2 == 0;
-                var week = isOdd ? "1" : "2";
+                var dayOfWeek = GetDayOfWeek(row);
 
-                var dayRow = row / 14 * 14 + 4;
-                var partDay = _worksheet.Cells[dayRow, 1];
+                var (startTime, endTime) = GetTime(row);
 
-                var timeRow = row % 2 == 0 ? row : row - 1;
-                var partTime = _worksheet.Cells[timeRow, 2];
+                var subject = string.Join("#", _worksheet.Cells[row, col].Text.Split("\n"));
 
-                var times = partTime.Text.Split(" - ");
-                var startTime = times[0];
-                var endTime = times[1];
-                
-                var value = string.Join("#", excelRange.Text.Split("\n"));
-                
-                str.Append($"{partDay.Text}#{startTime}#{endTime}#{value}#{week}");
+                str.Append($"{dayOfWeek}#{startTime}#{endTime}#{subject}#{week}");
                 teacherSchedule.Lessons.Add(str.ToString());
                 str.Clear();
             }
@@ -52,5 +42,28 @@ public class ExcelParser
         }
 
         return teacherSchedules;
+    }
+
+    private string GetDayOfWeek(int row)
+    {
+        var dayRow = row / 14 * 14 + 4;
+        var partDay = _worksheet.Cells[dayRow, 1].Text;
+        return partDay;
+    }
+
+    private KeyValuePair<string, string> GetTime(int row)
+    {
+        var timeRow = row % 2 == 0 ? row : row - 1;
+        var partTime = _worksheet.Cells[timeRow, 2];
+        var times = partTime.Text.Split(" - ");
+
+        return new KeyValuePair<string, string>(times[0], times[1]);
+    }
+
+    private string GetWeek(int row, int col)
+    {
+        var isOdd = Convert.ToInt16(_worksheet.Cells[row, col].Address[^1]) % 2 == 0;
+        var week = isOdd ? "1" : "2";
+        return week;
     }
 }

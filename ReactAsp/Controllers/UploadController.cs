@@ -49,7 +49,15 @@ public class UploadController : ControllerBase
 
             var parser = new ExcelParser(worksheet);
             var result = parser.ParseData();
-            
+
+            foreach (var teacherSchedule in result)
+            {
+                Console.WriteLine(teacherSchedule.TeacherName);
+                foreach (var lesson in teacherSchedule.Lessons)
+                {
+                    Console.WriteLine(lesson);
+                }
+            }
             
             var groupRepository = new GroupRepository(_context);
             var newGroup = new Group { GroupNumber =  Guid.NewGuid().ToString() };
