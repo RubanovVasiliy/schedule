@@ -6,7 +6,7 @@ namespace ReactAsp.Utils;
 public class ExcelParser
 {
     private readonly ExcelWorksheet _worksheet;
-
+    
     public ExcelParser(ExcelWorksheet worksheet)
     {
         _worksheet = worksheet;

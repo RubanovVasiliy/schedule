@@ -1,10 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace schedule.Data;
+namespace ReactAsp.Data.Schedule;
 
-public class ScheduleContext : DbContext
+public sealed class ScheduleContext : DbContext
 {
-    public ScheduleContext(DbContextOptions<ScheduleContext> options) : base(options) { }
+    public ScheduleContext(DbContextOptions<ScheduleContext> options) : base(options)
+    {
+        Database.EnsureCreated();
+    }
 
     public DbSet<Group> Groups { get; set; }
     public DbSet<Teacher> Teacher { get; set; }
@@ -30,7 +33,7 @@ public class ScheduleContext : DbContext
             .HasForeignKey(gc => gc.GroupId);
     }
     
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var POSTGRES_USER = Environment.GetEnvironmentVariable("POSTGRES_USER");
         var POSTGRES_PASSWORD = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
@@ -41,7 +44,7 @@ public class ScheduleContext : DbContext
         optionsBuilder.UseNpgsql(
             $"Host={POSTGRES_HOST};Port={POSTGRES_PORT};Database={POSTGRES_DB};Username={POSTGRES_USER};Password={POSTGRES_PASSWORD};"
         );
-        
+        Console.WriteLine($"Host={POSTGRES_HOST};Port={POSTGRES_PORT};Database={POSTGRES_DB};Username={POSTGRES_USER};Password={POSTGRES_PASSWORD}");
         Console.WriteLine("Success");
-    }
+    }*/
 }

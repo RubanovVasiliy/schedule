@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace schedule.Data;
+namespace ReactAsp.Data.Schedule;
 
 public class Group
 {
@@ -9,8 +9,8 @@ public class Group
     public int Id { get; set; }
     public string GroupNumber { get; set; }
     
-    public virtual ICollection<Lesson> Lessons { get; set; }
-    public virtual ICollection<GroupOnClass> GroupsOnClasses { get; set; }
+    public ICollection<Lesson> Lessons { get; set; }
+    public ICollection<GroupOnClass> GroupsOnClasses { get; set; }
 }
 
 public class Teacher

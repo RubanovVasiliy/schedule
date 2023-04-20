@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using schedule.Data;
+using ReactAsp.Data.Schedule;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +9,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ScheduleContext>(item =>
-    item.UseNpgsql(builder.Configuration.GetConnectionString("db"))
+    item.UseNpgsql(builder.Configuration.GetConnectionString("schedule"))
 );
 
 var app = builder.Build();
