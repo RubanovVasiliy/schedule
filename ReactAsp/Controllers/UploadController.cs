@@ -58,11 +58,26 @@ public class UploadController : ControllerBase
             var lessonRepository = new LessonRepository(_context);
             var groupOnClassRepository = new GroupOnClassRepository(_context);
             var scheduleLoadRepository = new ScheduleLoadRepository(_context);
-
-
+            
             await scheduleLoadRepository.CreateAsync(new ScheduleLoad { LoadDate = DateTime.Now.ToUniversalTime() });
+            foreach (var subject in result.Subjects)
+            {
+                await subjectRepository.CreateIfNotExistAsync(new Subject { SubjectName = subject });
+            }
 
-            foreach (var teacherSchedule in result)
+            foreach (var group in result.Groups)
+            {
+                await groupRepository.CreateIfNotExistAsync(new Group { GroupNumber = group });
+            }
+
+            
+            foreach (var classroom in result.Classrooms)
+            {
+                await classroomRepository.CreateIfNotExistAsync(new Classroom { ClassroomNumber = classroom });
+            }
+
+
+            foreach (var teacherSchedule in result.Schedule)
             {
                 var teacher = teacherSchedule.TeacherName;
                 await teacherRepository.CreateIfNotExistAsync(new Teacher { FullName = teacher });
@@ -75,29 +90,18 @@ public class UploadController : ControllerBase
                     if (parts.Length == 7)
                     {
                         classroom = parts[5];
-                        await classroomRepository.CreateIfNotExistAsync(new Classroom { ClassroomNumber = classroom });
                     }
-                    
                     
                     var subject = parts[3];
-                    await subjectRepository.CreateIfNotExistAsync(new Subject { SubjectName = subject });
-
-                    
                     var groups = parts[4].Split(", ");
-                    foreach (var group in groups)
-                    {
-                        await groupRepository.CreateIfNotExistAsync(new Group { GroupNumber = group });
-                    }
+
 
 
                     /*await lessonRepository.CreateAsync(new Lesson
                     {
                     });*/
-                    
-                    
                 }
             }
-
             
             var all = await groupRepository.GetAllAsync();
             
@@ -112,27 +116,5 @@ public class UploadController : ControllerBase
         {
             return BadRequest(new { message = $"Error: {ex.Message}" });
         }
-    }
-    
-    [HttpGet]
-    [Route("groups")]
-    public async Task<ActionResult<Group>> CreateGroup(int id)
-    {
-        var groupRepository = new GroupRepository(_context);
-        var teacherRepository = new TeacherRepository(_context);
-        var subjectRepository = new SubjectRepository(_context);
-        var classroomRepository = new ClassroomRepository(_context);
-        var lessonRepository = new LessonRepository(_context);
-        var groupOnClassRepository = new GroupOnClassRepository(_context);
-        var scheduleLoadRepository = new ScheduleLoadRepository(_context);
-        
-        // Create a new group
-        var newGroup = new Group { GroupNumber = "GroupA" };
-        await groupRepository.CreateAsync(newGroup);
-        await _context.SaveChangesAsync();
-        
-        //return CreatedAtAction(nameof(GetGroup), new { id = group.Id }, group);
-
-        return Ok(id);
     }
 }

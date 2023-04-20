@@ -12,9 +12,9 @@ public class ExcelParser
         _worksheet = worksheet;
     }
 
-    public IEnumerable<TeacherSchedule> ParseData()
+    public ScheduleUnit ParseData()
     {
-        var teacherSchedules = new List<TeacherSchedule>();
+        var unit = new ScheduleUnit();
 
         for (var col = 3; col <= _worksheet.Dimension.End.Column; col++)
         {
@@ -26,22 +26,24 @@ public class ExcelParser
                 if (string.IsNullOrEmpty(_worksheet.Cells[row, col].Text)) continue;
 
                 var week = GetWeek(row, col);
-
                 var dayOfWeek = GetDayOfWeek(row);
-
                 var (startTime, endTime) = GetTime(row);
 
-                var subject = string.Join("#", _worksheet.Cells[row, col].Text.Split("\n"));
+                var subjectItems = _worksheet.Cells[row, col].Text.Split("\n");
+
+                AddUniqueItems(unit, subjectItems);
+
+                var subject = string.Join("#", subjectItems);
 
                 str.Append($"{dayOfWeek}#{startTime}#{endTime}#{subject}#{week}");
                 teacherSchedule.Lessons.Add(str.ToString());
                 str.Clear();
             }
 
-            teacherSchedules.Add(teacherSchedule);
+            unit.Schedule.Add(teacherSchedule);
         }
 
-        return teacherSchedules;
+        return unit;
     }
 
     private string GetDayOfWeek(int row)
@@ -65,5 +67,14 @@ public class ExcelParser
         var isOdd = Convert.ToInt16(_worksheet.Cells[row, col].Address[^1]) % 2 == 0;
         var week = isOdd ? "1" : "2";
         return week;
+    }
+
+    private static void AddUniqueItems(ScheduleUnit unit, IReadOnlyList<string> items)
+    {
+        unit.Subjects.Add(items[0]);
+        if (items.Count == 3)
+            unit.Classrooms.Add(items[2]);
+        foreach (var i in new List<string>(items[1].Split(", ")))
+            unit.Groups.Add(i);
     }
 }
