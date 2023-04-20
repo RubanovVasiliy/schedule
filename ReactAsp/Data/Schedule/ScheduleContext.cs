@@ -31,6 +31,22 @@ public sealed class ScheduleContext : DbContext
             .HasOne(gc => gc.Group)
             .WithMany(g => g.GroupsOnClasses)
             .HasForeignKey(gc => gc.GroupId);
+        
+        modelBuilder.Entity<Group>()
+            .HasIndex(e => e.GroupNumber)
+            .IsUnique();
+        
+        modelBuilder.Entity<Teacher>()
+            .HasIndex(e => e.FullName)
+            .IsUnique();
+        
+        modelBuilder.Entity<Classroom>()
+            .HasIndex(e => e.ClassroomNumber)
+            .IsUnique();
+        
+        modelBuilder.Entity<Subject>()
+            .HasIndex(e => e.SubjectName)
+            .IsUnique();
     }
     
     /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

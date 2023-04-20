@@ -11,4 +11,9 @@ public class GroupOnClassRepository : Repository<GroupOnClass>, IGroupOnClassRep
     public GroupOnClassRepository(DbContext context) : base(context)
     {
     }
+
+    public override Task<bool> ExistsAsync(string value)
+    {
+        throw new NotImplementedException();
+    }
 }

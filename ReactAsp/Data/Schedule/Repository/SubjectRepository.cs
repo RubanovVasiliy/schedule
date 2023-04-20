@@ -11,4 +11,18 @@ public class SubjectRepository : Repository<Subject>, ISubjectRepository
     public SubjectRepository(DbContext context) : base(context)
     {
     }
+
+    public override async Task<bool> ExistsAsync(string value)
+    {
+        return await _dbSet.AnyAsync(e => e.SubjectName == value);
+    }
+
+    public async Task<bool> CreateIfNotExistAsync(Subject entity)
+    {
+        if (await _dbSet.AnyAsync(e => e.SubjectName == entity.SubjectName)) return false;
+
+        await _dbSet.AddAsync(entity);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }

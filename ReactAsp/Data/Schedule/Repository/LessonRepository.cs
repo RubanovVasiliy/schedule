@@ -13,4 +13,9 @@ public class LessonRepository : Repository<Lesson>, ILessonRepository
     public LessonRepository(DbContext context) : base(context)
     {
     }
+
+    public override Task<bool> ExistsAsync(string value)
+    {
+        throw new NotImplementedException();
+    }
 }

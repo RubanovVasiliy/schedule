@@ -10,12 +10,13 @@ public interface IRepository<T> where T : class
     Task<T> CreateAsync(T entity);
     Task<T> UpdateAsync(T entity);
     Task DeleteAsync(int id);
+    Task<bool> ExistsAsync(string value);
 }
 
-public class Repository<T> : IRepository<T> where T : class
+public abstract class Repository<T> : IRepository<T> where T : class
 {
-    private readonly DbContext _context;
-    private readonly DbSet<T> _dbSet;
+    protected readonly DbContext _context;
+    protected readonly DbSet<T> _dbSet;
 
     public Repository(DbContext context)
     {
@@ -53,4 +54,6 @@ public class Repository<T> : IRepository<T> where T : class
         _dbSet.Remove(entity);
         await _context.SaveChangesAsync();
     }
+
+    public abstract Task<bool> ExistsAsync(string value);
 }

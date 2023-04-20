@@ -12,4 +12,9 @@ public class ScheduleLoadRepository : Repository<ScheduleLoad>, IScheduleLoadRep
     public ScheduleLoadRepository(DbContext context) : base(context)
     {
     }
+
+    public override Task<bool> ExistsAsync(string value)
+    {
+        throw new NotImplementedException();
+    }
 }

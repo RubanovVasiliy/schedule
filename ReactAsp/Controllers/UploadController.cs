@@ -49,22 +49,56 @@ public class UploadController : ControllerBase
 
             var parser = new ExcelParser(worksheet);
             var result = parser.ParseData();
+            
+            
+            var groupRepository = new GroupRepository(_context);
+            var teacherRepository = new TeacherRepository(_context);
+            var subjectRepository = new SubjectRepository(_context);
+            var classroomRepository = new ClassroomRepository(_context);
+            var lessonRepository = new LessonRepository(_context);
+            var groupOnClassRepository = new GroupOnClassRepository(_context);
+            var scheduleLoadRepository = new ScheduleLoadRepository(_context);
+
+
+            await scheduleLoadRepository.CreateAsync(new ScheduleLoad { LoadDate = DateTime.Now.ToUniversalTime() });
 
             foreach (var teacherSchedule in result)
             {
-                Console.WriteLine(teacherSchedule.TeacherName);
+                var teacher = teacherSchedule.TeacherName;
+                await teacherRepository.CreateAsync(new Teacher { FullName = teacher });
+
                 foreach (var lesson in teacherSchedule.Lessons)
                 {
-                    Console.WriteLine(lesson);
+                    var parts = lesson.Split('#');
+                    
+                    var classroom = "";
+                    if (parts.Length == 7)
+                    {
+                        classroom = parts[5];
+                        await classroomRepository.CreateIfNotExistAsync(new Classroom { ClassroomNumber = classroom });
+                    }
+                    
+                    
+                    var subject = parts[3];
+                    await subjectRepository.CreateIfNotExistAsync(new Subject { SubjectName = subject });
+
+                    
+                    var groups = parts[4].Split(", ");
+                    foreach (var group in groups)
+                    {
+                        await groupRepository.CreateIfNotExistAsync(new Group { GroupNumber = group });
+                    }
+
+
+                    /*await lessonRepository.CreateAsync(new Lesson
+                    {
+                    });*/
+                    
+                    
                 }
             }
-            
-            var groupRepository = new GroupRepository(_context);
-            var newGroup = new Group { GroupNumber =  Guid.NewGuid().ToString() };
-            
-            await groupRepository.CreateAsync(newGroup);
-            await _context.SaveChangesAsync();
 
+            
             var all = await groupRepository.GetAllAsync();
             
             return Ok(all);
