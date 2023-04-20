@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
-using ReactAsp.Data;
 using ReactAsp.Data.Schedule;
+using ReactAsp.Data.Schedule.Repository;
 using ReactAsp.Utils;
 
 namespace ReactAsp.Controllers;
@@ -49,11 +49,10 @@ public class UploadController : ControllerBase
 
             var parser = new ExcelParser(worksheet);
             var result = parser.ParseData();
-
             
             
             var groupRepository = new GroupRepository(_context);
-            var newGroup = new Group { GroupNumber = "GroupA" };
+            var newGroup = new Group { GroupNumber =  Guid.NewGuid().ToString() };
             
             await groupRepository.CreateAsync(newGroup);
             await _context.SaveChangesAsync();

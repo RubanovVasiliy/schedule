@@ -6,19 +6,22 @@ namespace ReactAsp.Utils;
 public class ExcelParser
 {
     private readonly ExcelWorksheet _worksheet;
-    
+
     public ExcelParser(ExcelWorksheet worksheet)
     {
         _worksheet = worksheet;
     }
 
-    public string ParseData()
+    public IEnumerable<TeacherSchedule> ParseData()
     {
+        var teacherSchedules = new List<TeacherSchedule>();
+
         var str = new StringBuilder();
 
         for (var col = 3; col <= _worksheet.Dimension.End.Column; col++)
         {
-            str.Append(_worksheet.Cells[2, col].Text + "\n");
+            var teacherSchedule = new TeacherSchedule(_worksheet.Cells[2, col].Text);
+            //str.Append(_worksheet.Cells[2, col].Text + "\n");
 
             for (var row = 3; row <= _worksheet.Dimension.End.Row; row++)
             {
@@ -49,10 +52,13 @@ public class ExcelParser
                 str.Append(value);
                 str.Append('#');
                 str.Append(isOdd ? "1" : "2");
-                str.Append('\n');
+                teacherSchedule.Lessons.Add(str.ToString());
+                str.Clear();
             }
+
+            teacherSchedules.Add(teacherSchedule);
         }
 
-        return str.ToString();
+        return teacherSchedules;
     }
 }
