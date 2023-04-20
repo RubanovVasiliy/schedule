@@ -58,22 +58,17 @@ public class UploadController : ControllerBase
             var lessonRepository = new LessonRepository(_context);
             var groupOnClassRepository = new GroupOnClassRepository(_context);
             var scheduleLoadRepository = new ScheduleLoadRepository(_context);
-            Console.WriteLine(0);
-
             
             await scheduleLoadRepository.CreateAsync(new ScheduleLoad { LoadDate = DateTime.Now.ToUniversalTime() });
-Console.WriteLine(1);
             foreach (var subject in result.Subjects)
             {
                 await subjectRepository.CreateIfNotExistAsync(new Subject { SubjectName = subject });
             }
-            Console.WriteLine(2);
 
             foreach (var group in result.Groups)
             {
                 await groupRepository.CreateIfNotExistAsync(new Group { GroupNumber = group });
             }
-            Console.WriteLine(3);
 
             
             foreach (var classroom in result.Classrooms)
