@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactAsp", "ReactAsp\ReactAsp.csproj", "{7F4D5B9C-A8B7-4C3D-9348-B770A1BB7F2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{5B0CFD6C-8DBD-4D4F-B989-8079C5A823C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{7F4D5B9C-A8B7-4C3D-9348-B770A1BB7F2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F4D5B9C-A8B7-4C3D-9348-B770A1BB7F2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F4D5B9C-A8B7-4C3D-9348-B770A1BB7F2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B0CFD6C-8DBD-4D4F-B989-8079C5A823C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B0CFD6C-8DBD-4D4F-B989-8079C5A823C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B0CFD6C-8DBD-4D4F-B989-8079C5A823C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B0CFD6C-8DBD-4D4F-B989-8079C5A823C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
