@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ReactAsp.Data.Schedule.Repository;
@@ -17,6 +18,11 @@ public class GroupRepository : Repository<Group>, IGroupRepository
     public override async Task<bool> ExistsAsync(string value)
     {
         return await _dbSet.AnyAsync(e => e.GroupNumber == value);
+    }
+
+    public override Task<Group> GetByFieldValueAsync(Expression<Func<Group, bool>> predicate)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<bool> CreateIfNotExistAsync(Group entity)

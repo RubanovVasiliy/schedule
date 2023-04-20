@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ReactAsp.Data.Schedule.Repository;
@@ -14,6 +15,11 @@ public class ScheduleLoadRepository : Repository<ScheduleLoad>, IScheduleLoadRep
     }
 
     public override Task<bool> ExistsAsync(string value)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Task<ScheduleLoad> GetByFieldValueAsync(Expression<Func<ScheduleLoad, bool>> predicate)
     {
         throw new NotImplementedException();
     }

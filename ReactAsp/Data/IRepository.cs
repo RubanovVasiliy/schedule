@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using ReactAsp.Data.Schedule;
 
@@ -11,6 +12,7 @@ public interface IRepository<T> where T : class
     Task<T> UpdateAsync(T entity);
     Task DeleteAsync(int id);
     Task<bool> ExistsAsync(string value);
+    Task<T> GetByFieldValueAsync(Expression<Func<T, bool>> predicate);
 }
 
 public abstract class Repository<T> : IRepository<T> where T : class
@@ -56,4 +58,5 @@ public abstract class Repository<T> : IRepository<T> where T : class
     }
 
     public abstract Task<bool> ExistsAsync(string value);
+    public abstract Task<T> GetByFieldValueAsync(Expression<Func<T, bool>> predicate);
 }

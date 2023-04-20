@@ -47,12 +47,13 @@ public class Lesson
     public int Id { get; set; }
     public int SubjectId { get; set; }
     public string DayOfWeek { get; set; }
-    public TimeSpan StartTime { get; set; }
-    public TimeSpan EndTime { get; set; }
+    public DateTime StartTime { get; set; }
+    public DateTime EndTime { get; set; }
+    
     public int ClassroomId { get; set; }
     public int TeacherId { get; set; }
     public int ScheduleLoadId { get; set; }
-    public bool IsEvenWeek { get; set; }
+    public bool IsOddWeek { get; set; }
     
     [ForeignKey("SubjectId")]
     public virtual Subject Subject { get; set; }

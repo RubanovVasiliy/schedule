@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ReactAsp.Data.Schedule.Repository;
@@ -16,7 +17,12 @@ public class TeacherRepository : Repository<Teacher>, ITeacherRepository
     {
         throw new NotImplementedException();
     }
-    
+
+    public override Task<Teacher> GetByFieldValueAsync(Expression<Func<Teacher, bool>> predicate)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<bool> CreateIfNotExistAsync(Teacher entity)
     {
         if (await _dbSet.AnyAsync(e => e.FullName == entity.FullName)) return false;

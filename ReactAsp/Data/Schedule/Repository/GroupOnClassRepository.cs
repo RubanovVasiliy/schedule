@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ReactAsp.Data.Schedule.Repository;
@@ -13,6 +14,11 @@ public class GroupOnClassRepository : Repository<GroupOnClass>, IGroupOnClassRep
     }
 
     public override Task<bool> ExistsAsync(string value)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Task<GroupOnClass> GetByFieldValueAsync(Expression<Func<GroupOnClass, bool>> predicate)
     {
         throw new NotImplementedException();
     }

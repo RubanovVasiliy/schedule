@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ReactAsp.Data.Schedule.Repository;
@@ -15,6 +16,11 @@ public class SubjectRepository : Repository<Subject>, ISubjectRepository
     public override async Task<bool> ExistsAsync(string value)
     {
         return await _dbSet.AnyAsync(e => e.SubjectName == value);
+    }
+
+    public override Task<Subject> GetByFieldValueAsync(Expression<Func<Subject, bool>> predicate)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<bool> CreateIfNotExistAsync(Subject entity)
