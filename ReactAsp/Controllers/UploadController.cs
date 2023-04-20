@@ -65,7 +65,7 @@ public class UploadController : ControllerBase
             foreach (var teacherSchedule in result)
             {
                 var teacher = teacherSchedule.TeacherName;
-                await teacherRepository.CreateAsync(new Teacher { FullName = teacher });
+                await teacherRepository.CreateIfNotExistAsync(new Teacher { FullName = teacher });
 
                 foreach (var lesson in teacherSchedule.Lessons)
                 {
