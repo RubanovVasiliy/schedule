@@ -15,13 +15,11 @@ public class ExcelParser
     public IEnumerable<TeacherSchedule> ParseData()
     {
         var teacherSchedules = new List<TeacherSchedule>();
-
-        var str = new StringBuilder();
-
+        
         for (var col = 3; col <= _worksheet.Dimension.End.Column; col++)
         {
             var teacherSchedule = new TeacherSchedule(_worksheet.Cells[2, col].Text);
-            //str.Append(_worksheet.Cells[2, col].Text + "\n");
+            var str = new StringBuilder();
 
             for (var row = 3; row <= _worksheet.Dimension.End.Row; row++)
             {
@@ -31,6 +29,7 @@ public class ExcelParser
                 if (string.IsNullOrEmpty(temp)) continue;
 
                 var isOdd = Convert.ToInt16(excelRange.Address[^1]) % 2 == 0;
+                var week = isOdd ? "1" : "2";
 
                 var dayRow = row / 14 * 14 + 4;
                 var partDay = _worksheet.Cells[dayRow, 1];
@@ -41,17 +40,10 @@ public class ExcelParser
                 var times = partTime.Text.Split(" - ");
                 var startTime = times[0];
                 var endTime = times[1];
-
+                
                 var value = string.Join("#", excelRange.Text.Split("\n"));
-                str.Append(partDay.Text);
-                str.Append('#');
-                str.Append(startTime);
-                str.Append('#');
-                str.Append(endTime);
-                str.Append('#');
-                str.Append(value);
-                str.Append('#');
-                str.Append(isOdd ? "1" : "2");
+                
+                str.Append($"{partDay.Text}#{startTime}#{endTime}#{value}#{week}");
                 teacherSchedule.Lessons.Add(str.ToString());
                 str.Clear();
             }
