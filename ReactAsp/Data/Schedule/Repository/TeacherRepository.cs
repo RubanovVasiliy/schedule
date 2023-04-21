@@ -18,9 +18,9 @@ public class TeacherRepository : Repository<Teacher>, ITeacherRepository
         throw new NotImplementedException();
     }
 
-    public override Task<Teacher> GetByFieldValueAsync(Expression<Func<Teacher, bool>> predicate)
+    public override async Task<Teacher> GetByFieldValueAsync(Expression<Func<Teacher, bool>> predicate)
     {
-        throw new NotImplementedException();
+        return await _dbSet.FirstOrDefaultAsync(predicate);
     }
 
     public async Task<bool> CreateIfNotExistAsync(Teacher entity)

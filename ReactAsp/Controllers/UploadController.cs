@@ -17,7 +17,7 @@ public class UploadController : ControllerBase
     {
         _context = context;
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> Upload()
     {
@@ -43,7 +43,7 @@ public class UploadController : ControllerBase
             }
 
             var fileInfo = new FileInfo(filePath);
-            
+
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using var package = new ExcelPackage(fileInfo);
             var worksheet = package.Workbook.Worksheets["TDSheet"];
@@ -51,7 +51,7 @@ public class UploadController : ControllerBase
             var parser = new ExcelParser(worksheet);
             var result = parser.ParseData();
 
-            
+
             var scheduleLoadRepository = new ScheduleLoadRepository(_context);
             var scheduleLoadId = (
                 await scheduleLoadRepository.CreateAsync(
@@ -60,40 +60,42 @@ public class UploadController : ControllerBase
                         LoadDate = DateTime.Now.ToUniversalTime()
                     })
             ).Id;
-            
-            
+
+
             var subjectRepository = new SubjectRepository(_context);
             foreach (var subject in result.Subjects)
             {
                 await subjectRepository.CreateIfNotExistAsync(new Subject { SubjectName = subject });
             }
 
-            
+
             var groupRepository = new GroupRepository(_context);
             foreach (var group in result.Groups)
             {
                 await groupRepository.CreateIfNotExistAsync(new Group { GroupNumber = group });
             }
 
-            
+
             var classroomRepository = new ClassroomRepository(_context);
             foreach (var classroom in result.Classrooms)
             {
                 await classroomRepository.CreateIfNotExistAsync(new Classroom { ClassroomNumber = classroom });
             }
 
-            
+            await classroomRepository.CreateIfNotExistAsync(new Classroom { ClassroomNumber = "" });
+
+
             var teacherRepository = new TeacherRepository(_context);
             var lessonRepository = new LessonRepository(_context);
-            var groupOnClassRepository = new GroupOnClassRepository(_context);
-            
+            var groupOnClassRepository = new LessonClassRepository(_context);
+
             foreach (var teacherSchedule in result.Schedule)
             {
                 var teacher = teacherSchedule.TeacherName;
                 await teacherRepository.CreateIfNotExistAsync(new Teacher { FullName = teacher });
                 var teacherId = (await teacherRepository.GetByFieldValueAsync(e => e.FullName == teacher)).Id;
 
-                
+
                 foreach (var lesson in teacherSchedule.Lessons)
                 {
                     var parts = lesson.Split('#');
@@ -116,21 +118,29 @@ public class UploadController : ControllerBase
                         var res = await classroomRepository.GetByFieldValueAsync(e => e.ClassroomNumber == classroom);
                         classroomId = res.Id;
                     }
+                    else
+                    {
+                        classroomId =
+                            (await classroomRepository.GetByFieldValueAsync(e => e.ClassroomNumber == classroom)).Id;
+                    }
+
                     var subjectId = (await subjectRepository.GetByFieldValueAsync(e => e.SubjectName == subject)).Id;
 
                     await lessonRepository.CreateAsync(new Lesson
                     {
                         DayOfWeek = dayOfWeek,
-                        StartTime = DateTime.ParseExact(startTime, "yyyy-MM-dd HH:mm:ss.ffffff zzz", CultureInfo.InvariantCulture),
-                        EndTime = DateTime.ParseExact(endTime, "yyyy-MM-dd HH:mm:ss.ffffff zzz", CultureInfo.InvariantCulture),
+                        StartTime = startTime,
+                        EndTime = endTime,
                         SubjectId = subjectId,
                         TeacherId = teacherId,
                         IsOddWeek = isOddWeek,
-                        ScheduleLoadId = scheduleLoadId
+                        ScheduleLoadId = scheduleLoadId,
+                        ClassroomId = classroomId
                     });
+
                 }
             }
-            
+
             return Ok(new { message = "File uploaded successfully" });
         }
 
@@ -138,5 +148,6 @@ public class UploadController : ControllerBase
         {
             return BadRequest(new { message = $"Error: {ex.Message}" });
         }
+
     }
 }

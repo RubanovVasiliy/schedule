@@ -18,9 +18,9 @@ public class SubjectRepository : Repository<Subject>, ISubjectRepository
         return await _dbSet.AnyAsync(e => e.SubjectName == value);
     }
 
-    public override Task<Subject> GetByFieldValueAsync(Expression<Func<Subject, bool>> predicate)
+    public override async Task<Subject> GetByFieldValueAsync(Expression<Func<Subject, bool>> predicate)
     {
-        throw new NotImplementedException();
+        return await _dbSet.FirstOrDefaultAsync(predicate);
     }
 
     public async Task<bool> CreateIfNotExistAsync(Subject entity)

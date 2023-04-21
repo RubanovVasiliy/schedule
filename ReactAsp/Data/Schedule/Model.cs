@@ -11,7 +11,7 @@ public class Group
     public string GroupNumber { get; set; }
     
     public ICollection<Lesson> Lessons { get; set; }
-    public ICollection<GroupOnClass> GroupsOnClasses { get; set; }
+    public ICollection<LessonClass> LessonClasses { get; set; }
 }
 
 public class Teacher
@@ -47,10 +47,10 @@ public class Lesson
     public int Id { get; set; }
     public int SubjectId { get; set; }
     public string DayOfWeek { get; set; }
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
+    public string StartTime { get; set; }
+    public string EndTime { get; set; }
     
-    public int ClassroomId { get; set; }
+    public int? ClassroomId { get; set; }
     public int TeacherId { get; set; }
     public int ScheduleLoadId { get; set; }
     public bool IsOddWeek { get; set; }
@@ -67,17 +67,17 @@ public class Lesson
     [ForeignKey("ScheduleLoadId")]
     public virtual ScheduleLoad ScheduleLoad { get; set; }
     
-    public virtual ICollection<GroupOnClass> GroupsOnClasses { get; set; }
+    public virtual ICollection<LessonClass> LessonClasses { get; set; }
 }
 
-public class GroupOnClass
+public class LessonClass
 {
     [Key]
     public int Id { get; set; }
-    public int ScheduleId { get; set; }
+    public int LessonId { get; set; }
     public int GroupId { get; set; }
     
-    [ForeignKey("ScheduleId")]
+    [ForeignKey("LessonId")]
     public virtual Lesson Lesson { get; set; }
     
     [ForeignKey("GroupId")]
