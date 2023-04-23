@@ -1,4 +1,7 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using ReactAsp.Data.Schedule;
@@ -52,6 +55,7 @@ public class UploadController : ControllerBase
             var result = parser.ParseData();
 
 
+            // init load date
             var scheduleLoadRepository = new ScheduleLoadRepository(_context);
             var scheduleLoadId = (
                 await scheduleLoadRepository.CreateAsync(
@@ -62,13 +66,14 @@ public class UploadController : ControllerBase
             ).Id;
 
 
+            // init load date
             var subjectRepository = new SubjectRepository(_context);
             foreach (var subject in result.Subjects)
             {
                 await subjectRepository.CreateIfNotExistAsync(new Subject { SubjectName = subject });
             }
 
-
+            // init load groups
             var groupRepository = new GroupRepository(_context);
             foreach (var group in result.Groups)
             {
@@ -76,6 +81,7 @@ public class UploadController : ControllerBase
             }
 
 
+            // init load classrooms
             var classroomRepository = new ClassroomRepository(_context);
             foreach (var classroom in result.Classrooms)
             {
@@ -85,9 +91,11 @@ public class UploadController : ControllerBase
             await classroomRepository.CreateIfNotExistAsync(new Classroom { ClassroomNumber = "" });
 
 
+            // init load teachers and lessons
             var teacherRepository = new TeacherRepository(_context);
             var lessonRepository = new LessonRepository(_context);
-            var groupOnClassRepository = new LessonClassRepository(_context);
+            var lessonClassRepository = new LessonClassRepository(_context);
+
 
             foreach (var teacherSchedule in result.Schedule)
             {
@@ -108,9 +116,7 @@ public class UploadController : ControllerBase
                     var endTime = parts[2];
                     var subject = parts[3];
                     var groups = parts[4].Split(", ");
-                    var isOddWeek = parts[^1].Equals('0');
-
-                    Console.WriteLine();
+                    var isOddWeek = parts[^1].Equals("0");
 
                     int classroomId;
                     if (!classroom.Equals(""))
@@ -126,7 +132,7 @@ public class UploadController : ControllerBase
 
                     var subjectId = (await subjectRepository.GetByFieldValueAsync(e => e.SubjectName == subject)).Id;
 
-                    await lessonRepository.CreateAsync(new Lesson
+                    var lessonId = (await lessonRepository.CreateAsync(new Lesson
                     {
                         DayOfWeek = dayOfWeek,
                         StartTime = startTime,
@@ -136,7 +142,15 @@ public class UploadController : ControllerBase
                         IsOddWeek = isOddWeek,
                         ScheduleLoadId = scheduleLoadId,
                         ClassroomId = classroomId
-                    });
+                    })).Id;
+
+
+                    foreach (var group in groups)
+                    {
+                        var groupId = (await groupRepository.GetByFieldValueAsync(e => e.GroupNumber == group)).Id;
+                        await lessonClassRepository.CreateAsync(new LessonClass()
+                            { GroupId = groupId, LessonId = lessonId });
+                    }
 
                 }
             }

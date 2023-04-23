@@ -1,6 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace ReactAsp.Data.Schedule;
 
@@ -50,7 +51,7 @@ public class Lesson
     public string StartTime { get; set; }
     public string EndTime { get; set; }
     
-    public int? ClassroomId { get; set; }
+    public int ClassroomId { get; set; }
     public int TeacherId { get; set; }
     public int ScheduleLoadId { get; set; }
     public bool IsOddWeek { get; set; }

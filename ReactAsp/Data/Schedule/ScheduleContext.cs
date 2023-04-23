@@ -5,8 +5,8 @@ namespace ReactAsp.Data.Schedule;
 public sealed class ScheduleContext : DbContext
 {
     public ScheduleContext(DbContextOptions<ScheduleContext> options) : base(options)
-    {
-        Database.EnsureCreated();
+    { 
+        Database.EnsureCreatedAsync();
     }
 
     public DbSet<Group> Groups { get; set; }
@@ -19,9 +19,6 @@ public sealed class ScheduleContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<LessonClass>()
-            .HasKey(gc => new { gc.LessonId, gc.GroupId });
-
         modelBuilder.Entity<LessonClass>()
             .HasOne(gc => gc.Lesson)
             .WithMany(s => s.LessonClasses)
