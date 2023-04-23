@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 
+using System.Globalization;
 using OfficeOpenXml;
 using ReactAsp.Utils;
 
@@ -22,7 +23,7 @@ class Program
         var set = new HashSet<string>();
         var list = new List<string>();
 
-        foreach (var teacherSchedule in teacherSchedules)
+        foreach (var teacherSchedule in teacherSchedules.Schedule)
         {
             foreach (var lesson in teacherSchedule.Lessons)
             {
@@ -36,6 +37,14 @@ class Program
         {
             Console.WriteLine(i);
         }
+
         Console.WriteLine(set.Count);
+
+
+        var s = "15:35:00";
+
+        var time = DateTime.ParseExact(s, "HH:mm:ss", CultureInfo.InvariantCulture);
+
+        Console.WriteLine(time);
     }
 }

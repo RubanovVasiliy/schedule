@@ -20,9 +20,9 @@ public class GroupRepository : Repository<Group>, IGroupRepository
         return await _dbSet.AnyAsync(e => e.GroupNumber == value);
     }
 
-    public override Task<Group> GetByFieldValueAsync(Expression<Func<Group, bool>> predicate)
+    public override async Task<Group> GetByFieldValueAsync(Expression<Func<Group, bool>> predicate)
     {
-        throw new NotImplementedException();
+        return await _dbSet.FirstOrDefaultAsync(predicate);
     }
 
     public async Task<bool> CreateIfNotExistAsync(Group entity)

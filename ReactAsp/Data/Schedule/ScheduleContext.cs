@@ -5,8 +5,8 @@ namespace ReactAsp.Data.Schedule;
 public sealed class ScheduleContext : DbContext
 {
     public ScheduleContext(DbContextOptions<ScheduleContext> options) : base(options)
-    {
-        Database.EnsureCreated();
+    { 
+        Database.EnsureCreatedAsync();
     }
 
     public DbSet<Group> Groups { get; set; }
@@ -14,22 +14,19 @@ public sealed class ScheduleContext : DbContext
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<Classroom> Classrooms { get; set; }
     public DbSet<Lesson> Lessons { get; set; }
-    public DbSet<GroupOnClass> GroupOnClass { get; set; }
+    public DbSet<LessonClass> LessonClasses { get; set; }
     public DbSet<ScheduleLoad> ScheduleLoads { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<GroupOnClass>()
-            .HasKey(gc => new { gc.ScheduleId, gc.GroupId });
-
-        modelBuilder.Entity<GroupOnClass>()
+        modelBuilder.Entity<LessonClass>()
             .HasOne(gc => gc.Lesson)
-            .WithMany(s => s.GroupsOnClasses)
-            .HasForeignKey(gc => gc.ScheduleId);
+            .WithMany(s => s.LessonClasses)
+            .HasForeignKey(gc => gc.LessonId);
 
-        modelBuilder.Entity<GroupOnClass>()
+        modelBuilder.Entity<LessonClass>()
             .HasOne(gc => gc.Group)
-            .WithMany(g => g.GroupsOnClasses)
+            .WithMany(g => g.LessonClasses)
             .HasForeignKey(gc => gc.GroupId);
         
         modelBuilder.Entity<Group>()
