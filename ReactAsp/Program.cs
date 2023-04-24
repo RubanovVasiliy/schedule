@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using ReactAsp.Data.Schedule;
 
@@ -11,6 +12,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ScheduleContext>(item =>
     item.UseNpgsql(builder.Configuration.GetConnectionString("schedule"))
 );
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 var app = builder.Build();
 

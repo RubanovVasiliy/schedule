@@ -3,7 +3,9 @@ using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using ReactAsp.Data;
 using ReactAsp.Data.Schedule;
 using ReactAsp.Data.Schedule.Repository;
 using ReactAsp.Utils;
@@ -11,7 +13,7 @@ using ReactAsp.Utils;
 namespace ReactAsp.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("upload")]
 public class UploadController : ControllerBase
 {
     private readonly ScheduleContext _context;
