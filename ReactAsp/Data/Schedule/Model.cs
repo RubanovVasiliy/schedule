@@ -34,7 +34,7 @@ public class Classroom
 {
     [Key] public int Id { get; set; }
     public string ClassroomNumber { get; set; }
-    public virtual ICollection<Lesson> Lessons { get; set; }
+    public virtual Lesson Lessons { get; set; }
 }
 
 public class Lesson

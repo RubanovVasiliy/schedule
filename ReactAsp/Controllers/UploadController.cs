@@ -101,7 +101,7 @@ public class UploadController : ControllerBase
 
             foreach (var teacherSchedule in result.Schedule)
             {
-                var teacher = teacherSchedule.TeacherName;
+                var teacher =  teacherSchedule.TeacherName.Substring(0, teacherSchedule.TeacherName.Length - 1); ;
                 await teacherRepository.CreateIfNotExistAsync(new Teacher { FullName = teacher });
                 var teacherId = (await teacherRepository.GetByFieldValueAsync(e => e.FullName == teacher)).Id;
 

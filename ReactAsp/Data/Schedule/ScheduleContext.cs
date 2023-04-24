@@ -6,7 +6,7 @@ public sealed class ScheduleContext : DbContext
 {
     public ScheduleContext(DbContextOptions<ScheduleContext> options) : base(options)
     { 
-        Database.EnsureCreatedAsync();
+         Database.Migrate();
     }
 
     public DbSet<Group> Groups { get; set; }
