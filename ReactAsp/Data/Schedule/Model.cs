@@ -48,7 +48,7 @@ public class Lesson
     public int ClassroomId { get; set; }
     public int TeacherId { get; set; }
     public int ScheduleLoadId { get; set; }
-    public bool IsOddWeek { get; set; }
+    public int WeekType { get; set; }
 
     [ForeignKey("SubjectId")] public virtual Subject Subject { get; set; }
 

@@ -64,6 +64,8 @@ public class ExcelParser
 
     private string GetWeek(int row, int col)
     {
+        if (_worksheet.Cells[row, col].Merge) return "3";
+        
         var isOdd = Convert.ToInt16(_worksheet.Cells[row, col].Address[^1]) % 2 == 0;
         var week = isOdd ? "1" : "0";
         return week;

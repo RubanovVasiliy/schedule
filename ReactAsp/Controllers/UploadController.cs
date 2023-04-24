@@ -118,7 +118,7 @@ public class UploadController : ControllerBase
                     var endTime = parts[2];
                     var subject = parts[3];
                     var groups = parts[4].Split(", ");
-                    var isOddWeek = parts[^1].Equals("0");
+                    var weekType = int.Parse(parts[^1]);
 
                     int classroomId;
                     if (!classroom.Equals(""))
@@ -141,7 +141,7 @@ public class UploadController : ControllerBase
                         EndTime = endTime,
                         SubjectId = subjectId,
                         TeacherId = teacherId,
-                        IsOddWeek = isOddWeek,
+                        WeekType = weekType,
                         ScheduleLoadId = scheduleLoadId,
                         ClassroomId = classroomId
                     })).Id;
