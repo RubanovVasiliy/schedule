@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Select, Spin } from 'antd';
 import axios from 'axios';
+import LessonCard from "./LessonCard";
 
 const { Option } = Select;
 
@@ -53,7 +54,7 @@ const ClassroomSelector = () => {
                     <ul>
                         {classroomInfo.lessons.map(lesson => (
                             <li key={lesson.id}>
-                                {lesson.dayOfWeek}, {lesson.startTime} - {lesson.endTime}, {lesson.subjectName}, {lesson.fullName}
+                                <LessonCard lesson={lesson}/>
                             </li>
                         ))}
                     </ul>
