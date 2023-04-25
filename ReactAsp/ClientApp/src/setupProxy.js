@@ -9,7 +9,7 @@ const context = [
     "/upload",
     "/weatherforecast",
     "/lesson",
-    "/classroom",
+    "/classroom"
 ];
 
 const onError = (err, req, resp, target) => {
@@ -27,7 +27,10 @@ module.exports = function (app) {
     //ws: true, 
     headers: {
       Connection: 'Keep-Alive'
-    }
+    },
+      pathRewrite: {
+          '/path': '/path?key=value'
+      }
   });
 
   app.use(appProxy);
