@@ -18,39 +18,45 @@ namespace ReactAsp.Controllers
 
         // GET: api/Lesson
         [HttpGet]
-        [SuppressMessage("ReSharper.DPA", "DPA0007: Large number of DB records", MessageId = "count: 109")]
-        public async Task<ActionResult<IEnumerable<Lesson>>> GetLessons()
+        public async Task<ActionResult<IEnumerable<object>>> GetLessons()
         {
             return await _context.Lessons
                 .Include(l => l.Teacher)
                 .Include(l => l.Subject)
                 .Include(l => l.Classroom)
-                .Select(l => new Lesson {
-                    Id = l.Id,
-                    DayOfWeek = l.DayOfWeek,
-                    StartTime = l.StartTime,
-                    EndTime = l.EndTime,
-                    Teacher = new Teacher {
-                        FullName = l.Teacher.FullName
-                    },
-                    Subject = new Subject {
-                        SubjectName = l.Subject.SubjectName
-                    },
-                    Classroom = new Classroom {
-                        ClassroomNumber = l.Classroom.ClassroomNumber
-                    },
+                .Select(l => new  {
+                    l.Id,
+                    l.DayOfWeek,
+                    l.StartTime,
+                    l.EndTime,
+                    l.Teacher.FullName,
+                    l.WeekType,
+                    l.Subject.SubjectName,
+                    l.Classroom.ClassroomNumber
                 })
                 .ToListAsync();
         }
 
-        [HttpGet("{name}")]
-        public async Task<ActionResult<IEnumerable<Lesson>>> GetLessons(string name)
+        [HttpGet("all/{ScheduleId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetLessons(int ScheduleId)
         {
             return await _context.Lessons
-                .Include(i => i.Subject)
-                .Include(i => i.Classroom)
-                .Include(i => i.Teacher)
-                .Where(i => i.Teacher.FullName == name)
+                .Include(l => l.Teacher)
+                .Include(l => l.Subject)
+                .Include(l => l.Classroom)
+                .Where(l => l.ScheduleLoadId == ScheduleId)
+                .Select(l => new
+                {
+                    l.Id,
+                    l.DayOfWeek,
+                    l.StartTime,
+                    l.EndTime,
+                    l.Teacher.FullName,
+                    l.WeekType,
+                    l.Subject.SubjectName,
+                    l.Classroom.ClassroomNumber,
+                    l.ScheduleLoadId
+                })
                 .ToListAsync();
         }
 

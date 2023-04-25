@@ -17,19 +17,41 @@ namespace ReactAsp.Controllers
 
         // GET: api/Classroom
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Classroom>>> GetClassrooms()
+        public async Task<ActionResult<IEnumerable<object>>> GetClassrooms()
         {
             return await _context.Classrooms
-                .Include(i => i.Lessons)
+                .Select(l => new
+                {
+                    l.Id,
+                    l.ClassroomNumber
+                })
                 .ToListAsync();
         }
         
-
         // GET: api/Classroom/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Classroom>> GetClassroom(int id)
+        public async Task<ActionResult<object>> GetClassroom(int id)
         {
-            var lesson = await _context.Classrooms.FindAsync(id);
+            var lesson = await _context.Classrooms
+                .Where(c => c.Id == id)
+                .Select(c => new
+                {
+                    c.Id,
+                    c.ClassroomNumber,
+                    Lessons = c.Lessons.Select(l => new
+                    {
+                        l.Id, 
+                        l.DayOfWeek,
+                        l.StartTime, 
+                        l.EndTime,
+                        l.WeekType,
+                        l.Subject.SubjectName,
+                        l.Teacher.FullName
+
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
+
 
             if (lesson == null)
             {
