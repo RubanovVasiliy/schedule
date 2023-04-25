@@ -6,6 +6,16 @@ const LessonCard = ({ lesson }) => {
             <p>{lesson.dayOfWeek}, {lesson.startTime} - {lesson.endTime}</p>
             <p>{lesson.subjectName}</p>
             <p>{lesson.fullName}</p>
+            {lesson.weekType == '1' 
+                ? 
+                <p>Нечетная неделя</p> 
+                : 
+                lesson.weekType == '0' 
+                    ? 
+                    <p>Четная неделя</p> 
+                    :
+                    <></>
+            }
         </Card>
     );
 };

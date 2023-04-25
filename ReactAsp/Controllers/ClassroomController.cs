@@ -28,38 +28,42 @@ namespace ReactAsp.Controllers
                 .ToListAsync();
         }
         
+        
         // GET: api/Classroom/5
         [HttpGet("{id}")]
         public async Task<ActionResult<object>> GetClassroom(int id)
         {
-            var lesson = await _context.Classrooms
+            var classroom = await _context.Classrooms
                 .Where(c => c.Id == id)
                 .Select(c => new
                 {
                     c.Id,
                     c.ClassroomNumber,
-                    Lessons = c.Lessons.Select(l => new
-                    {
-                        l.Id, 
-                        l.DayOfWeek,
-                        l.StartTime, 
-                        l.EndTime,
-                        l.WeekType,
-                        l.Subject.SubjectName,
-                        l.Teacher.FullName
-
-                    }).ToList()
+                    Lessons = c.Lessons
+                        .OrderBy(l => l.DayOfWeek)
+                        .ThenBy(l => l.StartTime)
+                        .Select(l => new
+                        {
+                            l.Id, 
+                            l.DayOfWeek,
+                            l.StartTime, 
+                            l.EndTime,
+                            l.WeekType,
+                            l.Subject.SubjectName,
+                            l.Teacher.FullName
+                        })
+                        .ToList()
                 })
                 .FirstOrDefaultAsync();
 
-
-            if (lesson == null)
+            if (classroom == null)
             {
                 return NotFound();
             }
 
-            return lesson;
+            return classroom;
         }
+
 
         // PUT: api/Classroom/5
         [HttpPut("{id}")]
