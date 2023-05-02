@@ -81,6 +81,7 @@ public class UploadController : ControllerBase
             {
                 await groupRepository.CreateIfNotExistAsync(new Group { GroupNumber = group });
             }
+            await groupRepository.CreateIfNotExistAsync(new Group() { GroupNumber = "" });
 
 
             // init load classrooms
