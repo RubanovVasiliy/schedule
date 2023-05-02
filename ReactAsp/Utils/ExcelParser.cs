@@ -1,13 +1,19 @@
 using System.Text;
+using System.Text.RegularExpressions;
 using OfficeOpenXml;
 
 namespace ReactAsp.Utils;
 
 public class ExcelParser
 {
-    private int _columnStartIndex = 3;
-    private int _rowStartIndex = 4;
-    
+    private const int ColumnStartIndex = 3;
+    private const int RowStartIndex = 4;
+
+    private const string PatternGroup = @"\w{2}-?\d{3}";
+    private const string PatternClass = @"\w\.\d{3}\w?\s?\(\w\.\d\)?";
+
+    public ScheduleUnit Unit { get; } = new();
+
     private readonly ExcelWorksheet _worksheet;
 
     public ExcelParser(ExcelWorksheet worksheet)
@@ -15,16 +21,16 @@ public class ExcelParser
         _worksheet = worksheet;
     }
 
-    public ScheduleUnit ParseData()
+    public void ParseData()
     {
-        var unit = new ScheduleUnit();
+        var lessonString = new StringBuilder();
+        var subjectString = new StringBuilder();
 
-        for (var col = _columnStartIndex; col <= _worksheet.Dimension.End.Column; col++)
+        for (var col = ColumnStartIndex; col <= _worksheet.Dimension.End.Column; col++)
         {
-            var teacherSchedule = new TeacherSchedule(_worksheet.Cells[2, col].Text);
-            var str = new StringBuilder();
+            var teacherSchedule = new TeacherSchedule(_worksheet.Cells[RowStartIndex - 1, col].Text);
 
-            for (var row = _rowStartIndex; row <= _worksheet.Dimension.End.Row; row++)
+            for (var row = RowStartIndex; row <= _worksheet.Dimension.End.Row; row++)
             {
                 if (string.IsNullOrEmpty(_worksheet.Cells[row, col].Text)) continue;
 
@@ -32,26 +38,54 @@ public class ExcelParser
                 var dayOfWeek = GetDayOfWeek(row);
                 var (startTime, endTime) = GetTime(row);
 
-                var subjectItems = _worksheet.Cells[row, col].Text.Split("\n");
+                subjectString.Append(_worksheet.Cells[row, col].Text)
+                    .Replace('\n', ' ')
+                    .Replace("  ", " ");
 
-                AddUniqueItems(unit, subjectItems);
 
-                var subject = string.Join("#", subjectItems);
+                var newGroups = Regex.Matches(subjectString.ToString(), PatternGroup);
+                var newClasses = Regex.Matches(subjectString.ToString(), PatternClass);
 
-                str.Append($"{dayOfWeek}#{startTime}#{endTime}#{subject}#{week}");
-                teacherSchedule.Lessons.Add(str.ToString());
-                str.Clear();
+                var sItems = subjectString.ToString().Split(' ');
+
+                //Console.Write(subjectString);
+                //Console.WriteLine(" " + sItems.Length + " " + newGroups.Count + " " + newClasses.Count);
+                //Console.WriteLine(string.Join(" ",sItems.Take(sItems.Length - newGroups.Count - newClasses.Count * 2)));
+
+                var groups = new List<string>();
+                var subject = new List<string> { string.Join(" ", sItems.Take(sItems.Length - newGroups.Count - newClasses.Count * 2)) };
+                Unit.AddSubject(subject[0]);
+                
+                foreach (Match group in newGroups)
+                {
+                    groups.Add(group.ToString());
+                    Unit.AddGroup(group.ToString());
+                }
+
+                subject.Add(string.Join(",", groups));
+
+                foreach (Match classroom in newClasses)
+                {
+                    subject.Add(classroom.ToString());
+                    Unit.AddClassroom(classroom.ToString());
+                }
+
+                var subjectGroupClassroom = string.Join("#", subject);
+
+                lessonString.Append($"{dayOfWeek}#{startTime}#{endTime}#{subjectGroupClassroom}#{week}");
+                Console.WriteLine(lessonString);
+                teacherSchedule.Lessons.Add(lessonString.ToString());
+                lessonString.Clear();
+                subjectString.Clear();
             }
 
-            unit.Schedule.Add(teacherSchedule);
+            Unit.Schedule.Add(teacherSchedule);
         }
-
-        return unit;
     }
 
     private string GetDayOfWeek(int row)
     {
-        var dayRow = row / 14 * 14 + _rowStartIndex + 1;
+        var dayRow = row / 14 * 14 + RowStartIndex + 1;
         var partDay = _worksheet.Cells[dayRow, 1].Text;
         return partDay;
     }
@@ -68,25 +102,9 @@ public class ExcelParser
     private string GetWeek(int row, int col)
     {
         if (_worksheet.Cells[row, col].Merge) return "3";
-        
+
         var isOdd = Convert.ToInt16(_worksheet.Cells[row, col].Address[^1]) % 2 == 1;
         var week = isOdd ? "1" : "0";
         return week;
-    }
-
-    private static void AddUniqueItems(ScheduleUnit unit, IReadOnlyList<string> items)
-    {
-        unit.Subjects.Add(items[0]);
-        switch (items.Count)
-        {
-            case 3:
-                unit.Classrooms.Add(items[2]);
-                break;
-            case 2:
-            {
-                foreach (var i in new List<string>(items[1].Split(", "))) unit.Groups.Add(i);
-                break;
-            }
-        }
     }
 }

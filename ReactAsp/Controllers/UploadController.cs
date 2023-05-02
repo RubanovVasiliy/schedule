@@ -54,8 +54,8 @@ public class UploadController : ControllerBase
             var worksheet = package.Workbook.Worksheets["TDSheet"];
 
             var parser = new ExcelParser(worksheet);
-            var result = parser.ParseData();
-
+            parser.ParseData();
+            var result = parser.Unit;
 
             // init load date
             var scheduleLoadRepository = new ScheduleLoadRepository(_context);
@@ -118,7 +118,7 @@ public class UploadController : ControllerBase
                     var startTime = parts[1];
                     var endTime = parts[2];
                     var subject = parts[3];
-                    var groups = parts[4].Split(", ");
+                    var groups = parts[4].Split(",");
                     var weekType = int.Parse(parts[^1]);
 
                     int classroomId;
