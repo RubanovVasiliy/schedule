@@ -50,7 +50,8 @@ namespace ReactAsp.Controllers
                             l.EndTime,
                             l.WeekType,
                             l.Subject.SubjectName,
-                            l.Teacher.FullName
+                            l.Teacher.FullName,
+                            groups = l.LessonClasses.Select(g=>g.Group.GroupNumber)
                         })
                         .ToList()
                 })

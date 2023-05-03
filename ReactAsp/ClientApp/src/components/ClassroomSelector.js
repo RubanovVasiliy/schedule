@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Select, Spin } from 'antd';
 import axios from 'axios';
-import LessonCard from "./LessonCard";
+import ScheduleTable from "./ScheduleTable";
 
 const { Option } = Select;
 
@@ -14,7 +14,12 @@ const ClassroomSelector = () => {
         setLoading(true);
         axios.get('/classroom')
             .then(res => {
-                setClassrooms(res.data);
+                const data = res.data.map(e=>{
+                    if(e.classroomNumber==="") 
+                        e.classroomNumber="Не указан" 
+                    return e;
+                });
+                setClassrooms(data);
                 setLoading(false);
             })
             .catch(err => {
@@ -40,7 +45,7 @@ const ClassroomSelector = () => {
         <div>
             <h2>Выберите класс</h2>
             <Select style={{ width: 200 }} loading={loading} onSelect={handleClassroomSelect}>
-                {classrooms.map(classroom => (
+                {classrooms.sort().map(classroom => (
                     <Option key={classroom.id} value={classroom.id}>
                         {classroom.classroomNumber}
                     </Option>
@@ -49,7 +54,7 @@ const ClassroomSelector = () => {
             {loading && <Spin />}
             {classroomInfo && (
                 <div>
-                    <h2>{classroomInfo.classroomNumber}</h2>
+                    {/*<h2>{classroomInfo.classroomNumber}</h2>
                     <h3>Расписание занятий:</h3>
                     <ul>
                         {classroomInfo.lessons.map(lesson => (
@@ -57,7 +62,11 @@ const ClassroomSelector = () => {
                                 <LessonCard lesson={lesson}/>
                             </li>
                         ))}
-                    </ul>
+                    </ul>*/}
+                    <div>
+                        <ScheduleTable schedule={classroomInfo}/>
+                        {/*<MyTable/>*/}
+                    </div>
                 </div>
             )}
         </div>

@@ -35,7 +35,6 @@ const XlsxLoader = () => {
                 <p className="ant-upload-text">Click or drag file to this area to upload</p>
             </Dragger>
         </div>
-            
             <ClassroomSelector/>
         </>
     );
