@@ -1,51 +1,84 @@
 import React from 'react';
-import { Table } from 'antd';
+import { Table ,Tag} from 'antd';
+
+const CustomRender = (record,key) => {
+    return <div>
+        {
+            key in record && record[key].lessons.map(e => {
+                    //console.log(e.subjectName)
+                    const color = e.weekType === 0 ? 'geekblue' : e.weekType === 1 ? 'green' : 'default'
+
+                    return (
+                        <Tag color={color} key={e.id} style={{maxWidth: "195px", whiteSpace: "normal"}}>
+                            <div>{e.subjectName}</div>
+                            {e.fullName && <div>{e.fullName}</div>}
+                            {e.groups && e.groups.map(g => <div key={g}>{g}</div>)}
+                            {e.classroomNumber && <div>{e.classroomNumber}</div>}
+                        </Tag>
+                    );
+                }
+            )
+        }
+    </div>
+}
 
 const columns = [
     {
         title: 'Время',
         dataIndex: 'time',
         key: 'time',
+        width: '100px',
     },
     {
         title: 'Понедельник',
         dataIndex: 'monday',
         key: 'monday',
-        render: (text, record) =>
-            <a>
-                {
-                    'monday' in record && record.monday.lessons.map(e => {
-                            console.log(e.subjectName)
-                            return <>{e.subjectName}</>
-                        }
-                    ).join()
-                }
-            </a>,
+        width: '15%',
+        render: (_, record) =>  CustomRender(record, 'monday')
     },
     {
         title: 'Вторник',
         dataIndex: 'tuesday',
         key: 'tuesday',
+        width: '15%',
+
+        render: (_, record) =>  CustomRender(record, 'tuesday')
     },
     {
         title: 'Среда',
         dataIndex: 'wednesday',
         key: 'wednesday',
+        width: '15%',
+
+        render: (_, record) =>  CustomRender(record, 'wednesday')
+
     },
     {
         title: 'Четверг',
         dataIndex: 'thursday',
         key: 'thursday',
+        width: '15%',
+
+        render: (_, record) =>  CustomRender(record, 'thursday')
+
     },
     {
         title: 'Пятница',
         dataIndex: 'friday',
         key: 'friday',
+        width: '15%',
+
+        render: (_, record) =>  CustomRender(record, 'friday')
+
     },
     {
         title: 'Суббота',
         dataIndex: 'saturday',
         key: 'saturday',
+        width: '15%',
+
+        render: (_, record) => CustomRender(record, 'saturday')
+
     },
 ];
 
@@ -76,7 +109,7 @@ const LessonString = ( lesson) => {
 const ScheduleTable = ({ schedule }) => {
     const data = timeIntervals.map((interval) => ({
         key: interval.start,
-        time: `${interval.start} - ${interval.end}`,
+        time: interval.start,
     }));
 
     //console.log(schedule)
@@ -100,7 +133,7 @@ const ScheduleTable = ({ schedule }) => {
         }
     }
     //console.log(data)
-    return <Table columns={columns} dataSource={data} pagination={false}/>;
+    return <Table columns={columns} dataSource={data} scroll={{ x: 1296 }} pagination={false}/>;
 };
 
 export default ScheduleTable;
