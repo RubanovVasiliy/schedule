@@ -10,7 +10,8 @@ const context = [
     "/weatherforecast",
     "/lesson",
     "/classrooms",
-    "/teachers"
+    "/teachers",
+    "/groups"
 ];
 
 const onError = (err, req, resp, target) => {
