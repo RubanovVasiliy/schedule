@@ -5,12 +5,12 @@ using ReactAsp.Data.Schedule;
 namespace ReactAsp.Controllers
 {
     [ApiController]
-    [Route("classroom")]
-    public class ClassroomController : ControllerBase
+    [Route("classrooms")]
+    public class ClassroomsController : ControllerBase
     {
         private readonly ScheduleContext _context;
 
-        public ClassroomController(ScheduleContext context)
+        public ClassroomsController(ScheduleContext context)
         {
             _context = context;
         }

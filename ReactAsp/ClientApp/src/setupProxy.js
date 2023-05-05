@@ -9,7 +9,7 @@ const context = [
     "/upload",
     "/weatherforecast",
     "/lesson",
-    "/classroom",
+    "/classrooms",
     "/teachers"
 ];
 
