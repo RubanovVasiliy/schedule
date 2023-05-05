@@ -5,40 +5,40 @@ using ReactAsp.Data.Schedule;
 namespace ReactAsp.Controllers
 {
     [ApiController]
-    [Route("classroom")]
-    public class ClassroomController : ControllerBase
+    [Route("teachers")]
+    public class TeacherController : ControllerBase
     {
         private readonly ScheduleContext _context;
 
-        public ClassroomController(ScheduleContext context)
+        public TeacherController(ScheduleContext context)
         {
             _context = context;
         }
 
-        // GET: api/Classroom
+        // GET: api/Teacher
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<object>>> GetClassrooms()
+        public async Task<ActionResult<IEnumerable<object>>> GetTeachers()
         {
-            return await _context.Classrooms
+            return await _context.Teacher
                 .Select(l => new
                 {
                     l.Id,
-                    l.ClassroomNumber
+                    l.FullName
                 })
                 .ToListAsync();
         }
         
         
-        // GET: api/Classroom/5
+        // GET: api/Teacher/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<object>> GetClassroom(int id)
+        public async Task<ActionResult<object>> GetTeacher(int id)
         {
-            var classroom = await _context.Classrooms
+            var classroom = await _context.Teacher
                 .Where(c => c.Id == id)
                 .Select(c => new
                 {
                     c.Id,
-                    c.ClassroomNumber,
+                    c.FullName,
                     Lessons = c.Lessons
                         .OrderBy(l => l.DayOfWeek)
                         .ThenBy(l => l.StartTime)
@@ -50,8 +50,8 @@ namespace ReactAsp.Controllers
                             l.EndTime,
                             l.WeekType,
                             l.Subject.SubjectName,
-                            l.Teacher.FullName,
-                            groups = l.LessonClasses.Select(g=>g.Group.GroupNumber)
+                            l.Classroom.ClassroomNumber,
+                            groups = l.LessonGroups.Select(g=>g.Group.GroupNumber)
                         })
                         .ToList()
                 })
@@ -66,9 +66,9 @@ namespace ReactAsp.Controllers
         }
 
 
-        // PUT: api/Classroom/5
+        // PUT: api/Teacher/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutClassroom(int id, Classroom lesson)
+        public async Task<IActionResult> PutTeacher(int id, Teacher lesson)
         {
             if (id != lesson.Id)
             {
@@ -83,7 +83,7 @@ namespace ReactAsp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ClassroomExists(id))
+                if (!TeacherExists(id))
                 {
                     return NotFound();
                 }
@@ -96,35 +96,35 @@ namespace ReactAsp.Controllers
             return NoContent();
         }
 
-        // POST: api/Classroom
+        // POST: api/Teacher
         [HttpPost]
-        public async Task<ActionResult<Classroom>> PostClassroom(Classroom lesson)
+        public async Task<ActionResult<Teacher>> PostTeacher(Teacher lesson)
         {
-            _context.Classrooms.Add(lesson);
+            _context.Teacher.Add(lesson);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetClassroom), new { id = lesson.Id }, lesson);
+            return CreatedAtAction(nameof(GetTeacher), new { id = lesson.Id }, lesson);
         }
 
-        // DELETE: api/Classroom/5
+        // DELETE: api/Teacher/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteClassroom(int id)
+        public async Task<IActionResult> DeleteTeacher(int id)
         {
-            var lesson = await _context.Classrooms.FindAsync(id);
+            var lesson = await _context.Teacher.FindAsync(id);
             if (lesson == null)
             {
                 return NotFound();
             }
 
-            _context.Classrooms.Remove(lesson);
+            _context.Teacher.Remove(lesson);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ClassroomExists(int id)
+        private bool TeacherExists(int id)
         {
-            return _context.Classrooms.Any(e => e.Id == id);
+            return _context.Teacher.Any(e => e.Id == id);
         }
     }
 }

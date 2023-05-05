@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ReactAsp.Data.Schedule.Repository;
 
-public interface ILessonClassRepository : IRepository<LessonClass>
+public interface ILessonClassRepository : IRepository<LessonGroup>
 {
 }
 
-public class LessonClassRepository : Repository<LessonClass>, ILessonClassRepository
+public class LessonClassRepository : Repository<LessonGroup>, ILessonClassRepository
 {
     public LessonClassRepository(DbContext context) : base(context)
     {
@@ -18,7 +18,7 @@ public class LessonClassRepository : Repository<LessonClass>, ILessonClassReposi
         throw new NotImplementedException();
     }
 
-    public override Task<LessonClass> GetByFieldValueAsync(Expression<Func<LessonClass, bool>> predicate)
+    public override Task<LessonGroup> GetByFieldValueAsync(Expression<Func<LessonGroup, bool>> predicate)
     {
         throw new NotImplementedException();
     }

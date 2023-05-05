@@ -14,17 +14,17 @@ public sealed class ScheduleContext : DbContext
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<Classroom> Classrooms { get; set; }
     public DbSet<Lesson> Lessons { get; set; }
-    public DbSet<LessonClass> LessonClasses { get; set; }
+    public DbSet<LessonGroup> LessonClasses { get; set; }
     public DbSet<ScheduleLoad> ScheduleLoads { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<LessonClass>()
+        modelBuilder.Entity<LessonGroup>()
             .HasOne(gc => gc.Lesson)
-            .WithMany(s => s.LessonClasses)
+            .WithMany(s => s.LessonGroups)
             .HasForeignKey(gc => gc.LessonId);
 
-        modelBuilder.Entity<LessonClass>()
+        modelBuilder.Entity<LessonGroup>()
             .HasOne(gc => gc.Group)
             .WithMany(g => g.LessonClasses)
             .HasForeignKey(gc => gc.GroupId);
