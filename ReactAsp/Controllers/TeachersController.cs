@@ -51,7 +51,7 @@ namespace ReactAsp.Controllers
                             l.WeekType,
                             l.Subject.SubjectName,
                             l.Classroom.ClassroomNumber,
-                            groups = l.LessonGroups.Select(g=>g.Group.GroupNumber)
+                            groups = l.LessonsGroups.Select(g=>g.Group.GroupNumber)
                         })
                         .ToList()
                 })

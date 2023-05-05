@@ -58,7 +58,7 @@ public sealed class Lesson
 
     [ForeignKey("ScheduleLoadId")] public ScheduleLoad ScheduleLoad { get; set; }
 
-    [JsonIgnore] public ICollection<LessonGroup> LessonGroups { get; set; }
+    [JsonIgnore] public ICollection<LessonGroup> LessonsGroups { get; set; }
 }
 
 public sealed class LessonGroup
