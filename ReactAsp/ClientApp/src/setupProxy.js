@@ -9,7 +9,8 @@ const context = [
     "/upload",
     "/weatherforecast",
     "/lesson",
-    "/classroom"
+    "/classroom",
+    "/teachers"
 ];
 
 const onError = (err, req, resp, target) => {
