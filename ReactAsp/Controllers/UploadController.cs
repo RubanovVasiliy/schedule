@@ -151,7 +151,7 @@ public class UploadController : ControllerBase
                     foreach (var group in groups)
                     {
                         var groupId = (await groupRepository.GetByFieldValueAsync(e => e.GroupNumber == group)).Id;
-                        await lessonClassRepository.CreateAsync(new LessonClass()
+                        await lessonClassRepository.CreateAsync(new LessonGroup()
                             { GroupId = groupId, LessonId = lessonId });
                     }
 
