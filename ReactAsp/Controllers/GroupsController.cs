@@ -34,6 +34,15 @@ public class GroupsController : ControllerBase
     public async Task<ActionResult<object>> GetGroups(int id)
     {
         var group = await _context.Groups
+            .Include(g => g.LessonClasses)
+            .ThenInclude(lg => lg.Lesson)
+            .ThenInclude(l => l.Subject)
+            .Include(g => g.LessonClasses)
+            .ThenInclude(lg => lg.Lesson)
+            .ThenInclude(l => l.Classroom)
+            .Include(g => g.LessonClasses)
+            .ThenInclude(lg => lg.Lesson)
+            .ThenInclude(l => l.Teacher)
             .FirstOrDefaultAsync(g => g.Id == id);
 
         if (group == null)
@@ -41,13 +50,7 @@ public class GroupsController : ControllerBase
             return NotFound();
         }
 
-        var lessons = await _context.LessonsGroups
-            .Where(lg => lg.GroupId == id)
-            .Select(lg => lg.Lesson)
-            .Include(l => l.Subject)
-            .Include(l => l.Classroom)
-            .Include(l => l.Teacher)
-            .ToListAsync();
+        var lessons = group.LessonClasses.Select(lg => lg.Lesson);
 
         return new
         {

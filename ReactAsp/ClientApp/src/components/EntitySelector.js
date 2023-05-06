@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Select, Spin, Radio } from 'antd';
+import { Select, Spin } from 'antd';
 import axios from 'axios';
 import ScheduleTable from "./ScheduleTable";
 
@@ -9,7 +9,6 @@ const EntitySelector = ({ entityName, entityEndpoint, entityIdKey, entityDisplay
     const [entities, setEntities] = useState([]);
     const [loading, setLoading] = useState(false);
     const [entityInfo, setEntityInfo] = useState(null);
-    const [selectedEntityId, setSelectedEntityId] = useState(null);
 
     useEffect(() => {
         setLoading(true);
@@ -40,30 +39,8 @@ const EntitySelector = ({ entityName, entityEndpoint, entityIdKey, entityDisplay
                 console.error(err);
                 setLoading(false);
             });
-        setSelectedEntityId(value);
     };
-
-    const handleEntityTypeChange = (e) => {
-        setSelectedEntityId(null);
-        setEntityInfo(null);
-        setEntities([]);
-        setLoading(true);
-        axios.get(`/${e.target.value.toLowerCase()}s`)
-            .then(res => {
-                const data = res.data.map(e => {
-                    if (e[entityDisplayKey] === "")
-                        e[entityDisplayKey] = "Не указано"
-                    return e;
-                });
-                setEntities(data);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error(err);
-                setLoading(false);
-            });
-    };
-
+    
     return (
         <div>
             <h2>Выберите {entityName}</h2>
