@@ -5,34 +5,34 @@ import ScheduleTable from "./ScheduleTable";
 
 const { Option } = Select;
 
-const ClassroomSelector = () => {
-    const [classrooms, setClassrooms] = useState([]);
+const EntitySelector = ({ entityName, entityEndpoint, entityIdKey, entityDisplayKey }) => {
+    const [entities, setEntities] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [classroomInfo, setClassroomInfo] = useState(null);
+    const [entityInfo, setEntityInfo] = useState(null);
 
     useEffect(() => {
         setLoading(true);
-        axios.get('/classrooms')
+        axios.get(entityEndpoint)
             .then(res => {
                 const data = res.data.map(e => {
-                    if (e.classroomNumber === "")
-                        e.classroomNumber = "Не указан"
+                    if (e[entityDisplayKey] === "")
+                        e[entityDisplayKey] = "Не указано"
                     return e;
                 });
-                setClassrooms(data);
+                setEntities(data);
                 setLoading(false);
             })
             .catch(err => {
                 console.error(err);
                 setLoading(false);
             });
-    }, []);
+    }, [entityEndpoint]);
 
-    const handleClassroomSelect = (value) => {
+    const handleEntitySelect = (value) => {
         setLoading(true);
-        axios.get(`/classrooms/${value}`)
+        axios.get(`${entityEndpoint}/${value}`)
             .then(res => {
-                setClassroomInfo(res.data);
+                setEntityInfo(res.data);
                 setLoading(false);
             })
             .catch(err => {
@@ -40,25 +40,25 @@ const ClassroomSelector = () => {
                 setLoading(false);
             });
     };
-
+    
     return (
         <div>
-            <h2>Выберите класс</h2>
-            <Select style={{width: 200}} loading={loading} onSelect={handleClassroomSelect}>
-                {classrooms.sort().map(classroom => (
-                    <Option key={classroom.id} value={classroom.id}>
-                        {classroom.classroomNumber}
+            <h2>Выберите {entityName}</h2>
+            <Select style={{width: 200}} loading={loading} onSelect={handleEntitySelect}>
+                {entities.sort().map(entity => (
+                    <Option key={entity[entityIdKey]} value={entity[entityIdKey]}>
+                        {entity[entityDisplayKey]}
                     </Option>
                 ))}
             </Select>
             {loading && <Spin/>}
-            {classroomInfo && (
+            {entityInfo && (
                 <div>
-                    <ScheduleTable schedule={classroomInfo}/>
+                    <ScheduleTable schedule={entityInfo}/>
                 </div>
             )}
         </div>
     );
 };
 
-export default ClassroomSelector;
+export default EntitySelector;

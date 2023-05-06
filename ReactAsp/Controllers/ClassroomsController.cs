@@ -5,12 +5,12 @@ using ReactAsp.Data.Schedule;
 namespace ReactAsp.Controllers
 {
     [ApiController]
-    [Route("classroom")]
-    public class ClassroomController : ControllerBase
+    [Route("classrooms")]
+    public class ClassroomsController : ControllerBase
     {
         private readonly ScheduleContext _context;
 
-        public ClassroomController(ScheduleContext context)
+        public ClassroomsController(ScheduleContext context)
         {
             _context = context;
         }
@@ -51,7 +51,7 @@ namespace ReactAsp.Controllers
                             l.WeekType,
                             l.Subject.SubjectName,
                             l.Teacher.FullName,
-                            groups = l.LessonClasses.Select(g=>g.Group.GroupNumber)
+                            groups = l.LessonsGroups.Select(g=>g.Group.GroupNumber)
                         })
                         .ToList()
                 })
