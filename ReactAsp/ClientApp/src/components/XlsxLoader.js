@@ -1,8 +1,6 @@
 import React  from 'react';
 import {Upload,  message} from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-import ClassroomSelector from "./ClassroomSelector";
-import EntitySelector from "./EntitySelector";
 import RadioButtonSelector from "./RadioButtonSelector";
 
 const XlsxLoader = () => {
@@ -37,8 +35,6 @@ const XlsxLoader = () => {
                 <p className="ant-upload-text">Click or drag file to this area to upload</p>
             </Dragger>
         </div>
-            {/*<ClassroomSelector/>
-            <EntitySelector entityName={"класс"} entityDisplayKey={'classroomNumber'} entityIdKey={'id'} entityEndpoint={'classrooms'}/>*/}
             <RadioButtonSelector/>
         </>
     );
