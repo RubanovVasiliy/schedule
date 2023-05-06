@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Select, Spin } from 'antd';
 import axios from 'axios';
 import ScheduleTable from "./ScheduleTable";
+import ICSCreator from "./ICSCreator";
 
 const { Option } = Select;
 
@@ -34,6 +35,7 @@ const EntitySelector = ({ entityName, entityEndpoint, entityIdKey, entityDisplay
             .then(res => {
                 setEntityInfo(res.data);
                 setLoading(false);
+                console.log(res.data)
             })
             .catch(err => {
                 console.error(err);
@@ -54,6 +56,7 @@ const EntitySelector = ({ entityName, entityEndpoint, entityIdKey, entityDisplay
             {loading && <Spin/>}
             {entityInfo && (
                 <div>
+                    <ICSCreator lessons={entityInfo.lessons}/>
                     <ScheduleTable schedule={entityInfo}/>
                 </div>
             )}

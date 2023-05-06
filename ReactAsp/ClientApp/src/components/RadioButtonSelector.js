@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Radio } from 'antd';
 import EntitySelector from "./EntitySelector";
+import ICSCreator from "./ICSCreator";
 
 const RadioButtonSelector = () => {
     const [selectedOption, setSelectedOption] = useState('A');
@@ -19,15 +20,22 @@ const RadioButtonSelector = () => {
             </Radio.Group>
             <div>
                 {selectedOption === 'A' &&
-                    <EntitySelector entityName={"класс"} entityDisplayKey={'classroomNumber'} entityIdKey={'id'} entityEndpoint={'classrooms'}/>
-
+                    <div>
+                        <EntitySelector entityName={"класс"} entityDisplayKey={'classroomNumber'} entityIdKey={'id'}
+                                        entityEndpoint={'classrooms'}/>
+                    </div>
                 }
                 {selectedOption === 'B' &&
-                    <EntitySelector entityName={"группу"} entityDisplayKey={'groupNumber'} entityIdKey={'id'} entityEndpoint={'groups'}/>
-
+                    <div>
+                        <EntitySelector entityName={"группу"} entityDisplayKey={'groupNumber'} entityIdKey={'id'}
+                                        entityEndpoint={'groups'}/>
+                    </div>
                 }
                 {selectedOption === 'C' &&
-                    <EntitySelector entityName={"преподователя"} entityDisplayKey={'fullName'} entityIdKey={'id'} entityEndpoint={'teachers'}/>
+                    <div>
+                        <EntitySelector entityName={"преподователя"} entityDisplayKey={'fullName'} entityIdKey={'id'}
+                                        entityEndpoint={'teachers'}/>
+                    </div>
                 }
             </div>
         </div>

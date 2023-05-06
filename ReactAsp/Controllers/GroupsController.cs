@@ -58,6 +58,7 @@ public class GroupsController : ControllerBase
             group.GroupNumber,
             Lessons = lessons.Select(l => new
             {
+                l.Id,
                 l.Subject.SubjectName,
                 l.DayOfWeek,
                 l.StartTime,
