@@ -21,7 +21,22 @@ function getPrefixByDay(day) {
     }
 }
 
+function getFirstFebruaryDate(dayOfWeek, weekType) {
+    const febDate = new Date(new Date().getFullYear(), 1, 1);
+
+    const offset = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'].indexOf(dayOfWeek.toLowerCase());
+
+    febDate.setDate(1 + offset - febDate.getDay());
+
+    if (febDate.getMonth() < 1) febDate.setDate(febDate.getDate() + 7)
+
+    if (weekType === 0) febDate.setDate(febDate.getDate() + 7)
+
+    return febDate.getDate();
+}
+
 function formatDate(date){
+    console.log(date)
     let year = date.getFullYear();
     let month = ('0' + (date.getMonth() + 1)).slice(-2); 
     let day = ('0' + date.getDate()).slice(-2); 
@@ -30,6 +45,10 @@ function formatDate(date){
     let seconds = ('0' + date.getSeconds()).slice(-2);
 
     return `${year}${month}${day}T${hours}${minutes}${seconds}`
+}
+
+function formatNumberTwoDigit(number) {
+    return ('0' + number).slice(-2);
 }
 function generateICS(schedule) {
     let ics = `BEGIN:VCALENDAR\n`
@@ -49,18 +68,7 @@ function generateICS(schedule) {
     ics += `END:VTIMEZONE\n`
 
     for (let lesson of schedule.lessons) {
-        let uid = `${schedule.id}-${lesson.id}`;
-
-        let startDate = new Date();
-        startDate.setDate(startDate.getDate() + (lesson.dayOfWeek.charCodeAt(0) - 1040) % 7 - startDate.getDay());
-        startDate.setHours(parseInt(lesson.startTime.substring(0, 2)));
-        startDate.setMinutes(parseInt(lesson.startTime.substring(3)));
-        let startStr = `${startDate.getUTCFullYear()}${startDate.getUTCMonth() + 1}${startDate.getUTCDate()}T${startDate.getUTCHours()}${startDate.getUTCMinutes()}00Z`;
-
-        let endDate = new Date(startDate.getTime());
-        endDate.setHours(parseInt(lesson.endTime.substring(0, 2)));
-        endDate.setMinutes(parseInt(lesson.endTime.substring(3)));
-        let endStr = `${endDate.getUTCFullYear()}${endDate.getUTCMonth() + 1}${endDate.getUTCDate()}T${endDate.getUTCHours()}${endDate.getUTCMinutes()}00Z`;
+        let uid = `${schedule.id}_${lesson.id}`;
 
         let lessonStr = `BEGIN:VEVENT\n`
 
@@ -78,32 +86,24 @@ function generateICS(schedule) {
 
         lessonStr += `SUMMARY:${lesson.subjectName}\n`
 
-
         let interval = lesson.weekType === 3 ? '1' : '2';
         let dayPrefix = getPrefixByDay(lesson.dayOfWeek)
-        console.log(dayPrefix)
-        console.log(lesson.dayOfWeek)
 
         let endTimeTokens = lesson.endTime.split(':')
         let untilDate = formatDate(
-            new Date(`2023-05-31T${endTimeTokens[0]}:${endTimeTokens[1]}:00`)
+            new Date(`2023-05-31T${formatNumberTwoDigit(endTimeTokens[0])}:${endTimeTokens[1]}:00`)
         )
-        
+
         lessonStr += `RRULE:FREQ=WEEKLY;UNTIL=${untilDate};INTERVAL=${interval};BYDAY=${dayPrefix};WKST=MO\n`
-        lessonStr += `DTSTART;TZID=Asia/Novosibirsk:   ${startStr}\n`
-        lessonStr += `DTEND;TZID=Asia/Novosibirsk:  ${endStr}\n`
+        let startTimeTokens = lesson.startTime.split(':')
+
+        let februaryDate = getFirstFebruaryDate(lesson.dayOfWeek, lesson.weekType);
+
+        let startDate = formatDate(new Date(`2023-02-${formatNumberTwoDigit(februaryDate)}T${formatNumberTwoDigit(startTimeTokens[0])}:${startTimeTokens[1]}:00`));
+        let endDate = formatDate(new Date(`2023-02-${formatNumberTwoDigit(februaryDate)}T${formatNumberTwoDigit(endTimeTokens[0])}:${endTimeTokens[1]}:00`));
+        lessonStr += `DTSTART;TZID=Asia/Novosibirsk:${startDate}\n`
+        lessonStr += `DTEND;TZID=Asia/Novosibirsk:${endDate}\n`
         lessonStr += `DTSTAMP:${formatDate(new Date())}\n`
-
-
-        /*
-        
-        RRULE:FREQ=WEEKLY;UNTIL=20230531T103500;INTERVAL=2;BYDAY=TU;WKST=MO
-        DTSTART;TZID=Asia/Novosibirsk:20230214T090000
-        DTEND;TZID=Asia/Novosibirsk:20230214T103500
-        DTSTAMP:20230507T133300
-        
-        */
-
 
         lessonStr += `UID:${uid}\n`
         lessonStr += `END:VEVENT\n`
