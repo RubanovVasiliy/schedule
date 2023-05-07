@@ -42,7 +42,7 @@ const EntitySelector = ({ entityName, entityEndpoint, entityIdKey, entityDisplay
                 setLoading(false);
             });
     };
-    
+
     return (
         <div>
             <h2>Выберите {entityName}</h2>
@@ -56,7 +56,7 @@ const EntitySelector = ({ entityName, entityEndpoint, entityIdKey, entityDisplay
             {loading && <Spin/>}
             {entityInfo && (
                 <div>
-                    <ICSCreator lessons={entityInfo.lessons}/>
+                    {entityEndpoint !== 'classrooms' && <ICSCreator schedule={entityInfo}/>}
                     <ScheduleTable schedule={entityInfo}/>
                 </div>
             )}

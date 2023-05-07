@@ -64,7 +64,7 @@ public class GroupsController : ControllerBase
                 l.StartTime,
                 l.EndTime,
                 l.Classroom.ClassroomNumber,
-                TeacherFullName = l.Teacher.FullName,
+                l.Teacher.FullName,
                 l.WeekType
             }).ToList()
         };
