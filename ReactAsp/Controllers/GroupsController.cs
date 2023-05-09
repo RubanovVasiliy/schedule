@@ -37,12 +37,15 @@ public class GroupsController : ControllerBase
             .Include(g => g.LessonClasses)
             .ThenInclude(lg => lg.Lesson)
             .ThenInclude(l => l.Subject)
+            .AsSplitQuery()
             .Include(g => g.LessonClasses)
             .ThenInclude(lg => lg.Lesson)
             .ThenInclude(l => l.Classroom)
+            .AsSplitQuery()
             .Include(g => g.LessonClasses)
             .ThenInclude(lg => lg.Lesson)
             .ThenInclude(l => l.Teacher)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(g => g.Id == id);
 
         if (group == null)
