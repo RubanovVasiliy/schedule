@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using ReactAsp.Data.Schedule;
 
 namespace ReactAsp.Controllers
@@ -55,6 +56,7 @@ namespace ReactAsp.Controllers
                         })
                         .ToList()
                 })
+                .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
             if (classroom == null)

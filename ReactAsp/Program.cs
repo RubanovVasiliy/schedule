@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using ReactAsp.Data.Schedule;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +12,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ScheduleContext>(item =>
     item.UseNpgsql(builder.Configuration.GetConnectionString("schedule"))
+        .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.MultipleCollectionIncludeWarning))
 );
-
+    
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;

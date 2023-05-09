@@ -100,8 +100,15 @@ public class ExcelParser
 
         foreach (Match group in newGroups)
         {
-            groups.Add(group.ToString());
-            Unit.AddGroup(group.ToString());
+            var groupString = new StringBuilder(group.ToString());
+            
+            if (groupString.Length == 5)
+            {
+                groupString.Insert(2,'-');
+            }
+
+            groups.Add(groupString.ToString());
+            Unit.AddGroup(groupString.ToString());
         }
 
         subject.Add(string.Join(",", groups));

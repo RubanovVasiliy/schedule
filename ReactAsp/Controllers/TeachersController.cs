@@ -55,6 +55,7 @@ namespace ReactAsp.Controllers
                         })
                         .ToList()
                 })
+                .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
             if (classroom == null)
