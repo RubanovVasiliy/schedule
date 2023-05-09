@@ -1,19 +1,14 @@
 import XlsxLoader from "./components/XlsxLoader";
-import { FetchData } from "./components/FetchData";
-import { Home } from "./components/Home";
+import { Schedule } from "./components/Schedule";
 
 const AppRoutes = [
   {
     index: true,
-    element: <Home />
+    element: <Schedule />
   },
   {
     path: '/loader',
     element: <XlsxLoader />
-  },
-  {
-    path: '/fetch-data',
-    element: <FetchData />
   }
 ];
 

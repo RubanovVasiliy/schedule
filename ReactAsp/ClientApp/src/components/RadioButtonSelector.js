@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Radio } from 'antd';
 import EntitySelector from "./EntitySelector";
-import ICSCreator from "./ICSCreator";
 
 const RadioButtonSelector = () => {
     const [selectedOption, setSelectedOption] = useState('A');

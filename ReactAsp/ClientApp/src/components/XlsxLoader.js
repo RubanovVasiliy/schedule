@@ -25,7 +25,6 @@ const XlsxLoader = () => {
         },
     };
     return (
-        <>
         <div>
             <h1>Upload .xlsx files</h1>
             <Dragger {...props}>
@@ -35,8 +34,6 @@ const XlsxLoader = () => {
                 <p className="ant-upload-text">Click or drag file to this area to upload</p>
             </Dragger>
         </div>
-            <RadioButtonSelector/>
-        </>
     );
 };
 
