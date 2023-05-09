@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Select, Spin } from 'antd';
 import axios from 'axios';
 import ScheduleTable from "./ScheduleTable";
@@ -6,22 +6,21 @@ import ICSCreator from "./ICSCreator";
 
 const { Option } = Select;
 
-
-
 const EntitySelector = ({ entityName, entityEndpoint, entityIdKey, entityDisplayKey }) => {
     const [entities, setEntities] = useState([]);
     const [loading, setLoading] = useState(false);
     const [entityInfo, setEntityInfo] = useState(null);
-    function compare( a, b ) {
-        if ( a[entityDisplayKey] < b[entityDisplayKey] ){
+
+    function compare(a, b) {
+        if (a[entityDisplayKey] < b[entityDisplayKey]) {
             return -1;
         }
-        if ( a[entityDisplayKey] > b[entityDisplayKey] ){
+        if (a[entityDisplayKey] > b[entityDisplayKey]) {
             return 1;
         }
         return 0;
     }
-    
+
     useEffect(() => {
         setLoading(true);
         axios.get(entityEndpoint)
@@ -32,7 +31,6 @@ const EntitySelector = ({ entityName, entityEndpoint, entityIdKey, entityDisplay
                         e[entityDisplayKey] = "Не указано"
                     return e;
                 })
-                console.log(data)
                 setEntities(data)
                 setLoading(false);
             })
@@ -48,7 +46,6 @@ const EntitySelector = ({ entityName, entityEndpoint, entityIdKey, entityDisplay
             .then(res => {
                 setEntityInfo(res.data);
                 setLoading(false);
-                console.log(res.data)
             })
             .catch(err => {
                 console.error(err);

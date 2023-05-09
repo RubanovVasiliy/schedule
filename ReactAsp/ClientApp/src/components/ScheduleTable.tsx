@@ -1,4 +1,4 @@
-import { Chip, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import {Tag} from "antd";
 
 const CustomRender = (record, key) => {

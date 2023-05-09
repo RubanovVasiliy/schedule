@@ -1,6 +1,4 @@
-import React from "react";
 import {Button} from '@mui/material'
-
 
 function getPrefixByDay(day) {
     switch (day) {
@@ -36,7 +34,6 @@ function getFirstFebruaryDate(dayOfWeek, weekType) {
 }
 
 function formatDate(date){
-    console.log(date)
     let year = date.getFullYear();
     let month = ('0' + (date.getMonth() + 1)).slice(-2); 
     let day = ('0' + date.getDate()).slice(-2); 
@@ -117,8 +114,6 @@ function generateICS(schedule) {
 }
 
 function ICSCreator({schedule}) {
-
-    console.log(schedule)
     function downloadICSFile() {
         const icsContent = generateICS(schedule);
         const blob = new Blob([icsContent], {type: "text/calendar;charset=utf-8"});

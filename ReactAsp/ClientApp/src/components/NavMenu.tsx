@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
@@ -17,11 +17,13 @@ export class NavMenu extends Component {
 
   toggleNavbar () {
     this.setState({
+      // @ts-ignore
       collapsed: !this.state.collapsed
     });
   }
 
   render() {
+    // @ts-ignore
     return (
       <header>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" container light>

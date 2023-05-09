@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import RadioButtonSelector from "./RadioButtonSelector";
 
 export class Schedule extends Component {
