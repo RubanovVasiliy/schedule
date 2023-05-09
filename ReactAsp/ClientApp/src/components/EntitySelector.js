@@ -6,21 +6,34 @@ import ICSCreator from "./ICSCreator";
 
 const { Option } = Select;
 
+
+
 const EntitySelector = ({ entityName, entityEndpoint, entityIdKey, entityDisplayKey }) => {
     const [entities, setEntities] = useState([]);
     const [loading, setLoading] = useState(false);
     const [entityInfo, setEntityInfo] = useState(null);
-
+    function compare( a, b ) {
+        if ( a[entityDisplayKey] < b[entityDisplayKey] ){
+            return -1;
+        }
+        if ( a[entityDisplayKey] > b[entityDisplayKey] ){
+            return 1;
+        }
+        return 0;
+    }
+    
     useEffect(() => {
         setLoading(true);
         axios.get(entityEndpoint)
             .then(res => {
-                const data = res.data.map(e => {
+                const data = res.data;
+                data.sort(compare).map(e => {
                     if (e[entityDisplayKey] === "")
                         e[entityDisplayKey] = "Не указано"
                     return e;
-                });
-                setEntities(data);
+                })
+                console.log(data)
+                setEntities(data)
                 setLoading(false);
             })
             .catch(err => {
