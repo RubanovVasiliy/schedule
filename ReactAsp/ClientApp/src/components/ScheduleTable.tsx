@@ -99,7 +99,7 @@ const ScheduleTable = ({ schedule }) => {
     }
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} >
             <Table stickyHeader aria-label="schedule table">
                 <TableHead>
                     <TableRow>

@@ -7,7 +7,7 @@ function Footer() {
         <footer style={{
             padding: '12px',
             boxShadow: '0 -2px 6px rgba(0, 0, 0, 0.1)',
-            backgroundColor: '#191970'
+            backgroundColor: '#6969B7'
         }}
                 className="fixed-bottom">
             <Container>
