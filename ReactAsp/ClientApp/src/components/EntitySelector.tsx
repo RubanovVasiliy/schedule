@@ -10,7 +10,8 @@ const EntitySelector = ({ entityName, entityEndpoint, entityIdKey, entityDisplay
     const [entities, setEntities] = useState([]);
     const [loading, setLoading] = useState(false);
     const [entityInfo, setEntityInfo] = useState(null);
-
+    
+    
     function compare(a, b) {
         if (a[entityDisplayKey] < b[entityDisplayKey]) {
             return -1;
@@ -55,19 +56,25 @@ const EntitySelector = ({ entityName, entityEndpoint, entityIdKey, entityDisplay
 
     return (
         <div>
-            <h2>Выберите {entityName}</h2>
-            <Select style={{width: 200}} loading={loading} onSelect={handleEntitySelect}>
+            <h2 style={{margin:'10px 0 5px 0'}}>Выберите {entityName}</h2>
+            <Select style={{width: 300, margin:'5px 0 5px 0'}} loading={loading} onSelect={handleEntitySelect}>
                 {entities.sort().map(entity => (
                     <Option key={entity[entityIdKey]} value={entity[entityIdKey]}>
                         {entity[entityDisplayKey]}
                     </Option>
                 ))}
             </Select>
-            {loading && <Spin/>}
+            {loading &&
+                <div>
+                    <Spin size="large"/>
+                </div>
+            }
             {entityInfo && (
                 <div>
                     {entityEndpoint !== 'classrooms' && <ICSCreator schedule={entityInfo}/>}
-                    <ScheduleTable schedule={entityInfo}/>
+                    <div style={{margin:'10px 0 50px 0'}}>
+                        <ScheduleTable schedule={entityInfo}/>
+                    </div>
                 </div>
             )}
         </div>

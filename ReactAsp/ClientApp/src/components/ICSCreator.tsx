@@ -130,8 +130,11 @@ function ICSCreator({schedule}) {
     return (
         <Button
             onClick={downloadICSFile}
-            variant="outlined">
-            Download Schedule as .ics
+            variant="outlined"
+            size='small'
+            style={{color:"#191970", borderColor:'#191970'}}
+        >
+            Скачать рассписание .ics
         </Button>
     );
 }

@@ -24,12 +24,12 @@ const XlsxLoader = () => {
     };
     return (
         <div>
-            <h1>Upload .xlsx files</h1>
+            <h1 style={{padding:"0 0 20px 0 "}}>Загрузка расписания</h1>
             <Dragger {...props}>
                 <p className="ant-upload-drag-icon">
                     <InboxOutlined />
                 </p>
-                <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                <p className="ant-upload-text">Нажмите на область или перетащите Excel файл</p>
             </Dragger>
         </div>
     );

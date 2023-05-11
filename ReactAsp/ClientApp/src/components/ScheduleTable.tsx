@@ -9,11 +9,13 @@ const CustomRender = (record, key) => {
                     const color = e.weekType === 0 ? 'geekblue' : e.weekType === 1 ? 'green' : 'default'
 
                     return (
-                        <Tag color={color} key={e.id} style={{maxWidth: "195px", whiteSpace: "normal"}}>
-                            <div>{e.subjectName}</div>
-                            {e.fullName && <div>{e.fullName}</div>}
-                            {e.groups && e.groups.map(g => <div key={g}>{g}</div>)}
-                            {e.classroomNumber && <div>{e.classroomNumber}</div>}
+                        <Tag color={color} key={e.id}
+                             style={{minWidth: "195px", whiteSpace: "normal", margin: "2px 0 2px 0"}}>
+                            <div style={{color: "rgba(0, 0, 0, 0.88)", fontWeight: "900"}}>{e.subjectName}</div>
+                            {e.fullName && <div style={{color: "rgba(0, 0, 0, 0.88)"}}>{e.fullName}</div>}
+                            {e.groups && e.groups.map(g => <div key={g}
+                                                                style={{color: "rgba(0, 0, 0, 0.88)"}}>{g}</div>)}
+                            {e.classroomNumber && <div style={{color: "rgba(0, 0, 0, 0.88)"}}>{e.classroomNumber}</div>}
                         </Tag>
                     );
                 })}
@@ -26,6 +28,7 @@ const columns = [
         id: 'time',
         label: 'Время',
         minWidth: 100,
+        style: { borderRight: '1px solid #ddd' },
     },
     {
         id: 'monday',
@@ -113,17 +116,17 @@ const ScheduleTable = ({ schedule }) => {
                     {data.map((row, index) => {
                         return (
                             <TableRow key={index}>
-                                <TableCell component="th" scope="row">
+                                <TableCell component="th" scope="row" style={{borderRight: '1px solid rgba(224, 224, 224, 1)'}}>
                                     <Typography variant="subtitle1" color="textSecondary">
                                         {row.time}
                                     </Typography>
                                 </TableCell>
-                                <TableCell>{CustomRender(row, 'monday')}</TableCell>
-                                <TableCell>{CustomRender(row, 'tuesday')}</TableCell>
-                                <TableCell>{CustomRender(row, 'wednesday')}</TableCell>
-                                <TableCell>{CustomRender(row, 'thursday')}</TableCell>
-                                <TableCell>{CustomRender(row, 'friday')}</TableCell>
-                                <TableCell>{CustomRender(row, 'saturday')}</TableCell>
+                                <TableCell style={{borderRight: '1px solid rgba(224, 224, 224, 1)'}}>{CustomRender(row, 'monday')}</TableCell>
+                                <TableCell style={{borderRight: '1px solid rgba(224, 224, 224, 1)'}}>{CustomRender(row, 'tuesday')}</TableCell>
+                                <TableCell style={{borderRight: '1px solid rgba(224, 224, 224, 1)'}}>{CustomRender(row, 'wednesday')}</TableCell>
+                                <TableCell style={{borderRight: '1px solid rgba(224, 224, 224, 1)'}}>{CustomRender(row, 'thursday')}</TableCell>
+                                <TableCell style={{borderRight: '1px solid rgba(224, 224, 224, 1)'}}>{CustomRender(row, 'friday')}</TableCell>
+                                <TableCell style={{borderRight: '1px solid rgba(224, 224, 224, 1)'}}>{CustomRender(row, 'saturday')}</TableCell>
                             </TableRow>
                         );
                     })}
