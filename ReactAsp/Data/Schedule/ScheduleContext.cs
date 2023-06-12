@@ -19,16 +19,6 @@ public sealed class ScheduleContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<LessonGroup>()
-            .HasOne(gc => gc.Lesson)
-            .WithMany(s => s.LessonsGroups)
-            .HasForeignKey(gc => gc.LessonId);
-
-        modelBuilder.Entity<LessonGroup>()
-            .HasOne(gc => gc.Group)
-            .WithMany(g => g.LessonClasses)
-            .HasForeignKey(gc => gc.GroupId);
-        
         modelBuilder.Entity<Group>()
             .HasIndex(e => e.GroupNumber)
             .IsUnique();

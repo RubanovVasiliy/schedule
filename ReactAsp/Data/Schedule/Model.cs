@@ -10,8 +10,6 @@ public class Group
 {
     [Key] public int Id { get; set; }
     public string GroupNumber { get; set; }
-
-    public ICollection<Lesson> Lessons { get; set; }
     [JsonIgnore] public ICollection<LessonGroup> LessonClasses { get; set; }
 }
 
@@ -19,7 +17,6 @@ public sealed class Teacher
 {
     [Key] public int Id { get; set; }
     public string FullName { get; set; }
-
     public ICollection<Lesson> Lessons { get; set; }
 }
 

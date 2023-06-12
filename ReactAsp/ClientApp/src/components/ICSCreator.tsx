@@ -121,7 +121,7 @@ function ICSCreator({schedule}) {
         const link = document.createElement("a");
 
         link.href = url;
-        link.setAttribute("download", "schedule.ics");
+        link.setAttribute("download", `${schedule.groupNumber ? schedule.groupNumber : schedule.fullName}.ics`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -133,7 +133,7 @@ function ICSCreator({schedule}) {
             variant="outlined"
             size='small'
             style={{color:"#191970", borderColor:'#191970'}}
-        >
+        >{console.log(schedule)}
             Скачать рассписание .ics
         </Button>
     );

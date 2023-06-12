@@ -16,9 +16,9 @@ const XlsxLoader = () => {
                 console.log(info.file, info.fileList);
             }
             if (status === 'done') {
-                message.success(`${info.file.name} file uploaded successfully.`);
+                message.success(`Файл ${info.file.name} успешно загружен.`);
             } else if (status === 'error') {
-                message.error(`${info.file.name} file upload failed.`);
+                message.error(`При загрузке файла ${info.file.name} возникла ошибка.`);
             }
         },
     };
